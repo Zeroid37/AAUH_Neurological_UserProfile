@@ -6,6 +6,7 @@ create table ZipCity (
 	zip varchar(6) not null primary key,
 	city varchar(20) not null
 )
+
 --Address
 create table Address (
 	id int IDENTITY(1,1) primary key,
@@ -13,6 +14,7 @@ create table Address (
 	houseNo varchar(8) not null,
 	zip_FK varchar(6) not null foreign key references ZipCity(zip),
 )
+
 --Person
 create table Person(
 	id int IDENTITY(1,1) primary key,
