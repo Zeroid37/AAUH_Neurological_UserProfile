@@ -131,5 +131,9 @@ create table UseProfileFlags(
 	PRIMARY KEY(userProfileID_FK, flagID_FK)
 )
 
-
-
+--QuestionnaireFlag
+create table QuestionnaireFlag(
+	questionnaireID_FK int not null foreign key references Questionnaire(id),
+	flagID_FK int not null foreign key references Flag(id),
+	PRIMARY KEY(questionnaireID_FK, flagID_FK)
+)
