@@ -1,3 +1,4 @@
+
 --Normal tables
 
 --zipCity
@@ -30,7 +31,9 @@ create table Person(
 --Patient
 create table Patient(
 	patientNo int IDENTITY(381943, 1) primary key,
+	cpr varchar(30) not null,
 	email_FK varchar(30) not null unique foreign key references Person(email)
+	
 )
 
 --Medical Secretary
@@ -67,31 +70,20 @@ create table Flag(
 	id int IDENTITY(1, 1) primary key,
 	flagName varchar(30) not null,
 	flagDescription varchar(100) not null,
-	flagRaised bit not null,
-	flagAlertLevel varchar(1) not null
+	flagRaised bit not null
+)
+
+--Question
+create table Question(
+	id int IDENTITY(1,1) primary key,
+	questionDescription varchar(200) not null
 )
 
 --Questionnaire
 create table Questionnaire(
 	id int IDENTITY(1,1) primary key,
 	title varchar(50) not null,
-)
-
---Question
-create table Question(
-	id int IDENTITY(1,1) primary key,
-	questionDescription varchar(200) not null,
-	flagID_FK int not null foreign key references Flag(id),
-	questionnaireID_FK int not null foreign key references Questionnaire(id)
-)
-
---Answer
-create table Answer(
-	id int IDENTITY(1, 1) primary key,
-	answerText varchar(100) not null,
-	isChosen bit not null,
-	answerValue int not null,
-	questionID_FK int not null foreign key references Question(id)
+	result varchar(200) not null
 )
 
 --Join Tables

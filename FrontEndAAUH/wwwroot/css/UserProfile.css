@@ -1,0 +1,92 @@
+﻿body {
+    background: #7a82ce;
+}
+
+.patient {
+    box-sizing: border-box;
+    border: solid;
+    width: 80%;
+    display: flex;
+    max-width: 80%;
+    margin-inline: auto;
+}
+.info {
+    color: black;
+    font: bold;
+    width: 40%;
+    height: auto;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+.profilBillede {
+    border: dashed;
+    width: 30%;
+    height: auto;
+    border-radius: 50%;
+}
+.profilBillede > img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.flags {
+    width: 30%;
+}
+
+.questionnaire {
+    margin: auto;
+    box-sizing: border-box;
+    border: solid;
+    width: 100%;
+    max-width: 80%;
+    margin-inline: auto;
+    padding: 15px;
+    font-size: larger;
+    text-align: center;
+}
+
+fieldset {
+    border: solid;
+    font-size: 1.3em;
+    width: 40%;
+    min-height: 45px;
+    vertical-align: middle;
+    text-align: center;
+    color: #ffffff;
+    background-color: #1c86b5;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline;
+    border-radius: 10px;
+    line-height: 45px;
+}
+
+legend {
+    background-color: gray;
+    color: white;
+    padding: 5px 10px;
+}
+
+.submitBotton{
+
+}
+.infoLabels {
+    font-weight: bold;
+}
+
+.noAccessError{
+    font: bold;
+}
+
+
+input[type="radio"] {
+    border: 0px;
+    height: 20px;
+    width: 20px;
+}
+

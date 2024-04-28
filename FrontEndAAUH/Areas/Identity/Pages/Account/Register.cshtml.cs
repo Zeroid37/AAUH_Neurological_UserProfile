@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using FrontEndAAUH.Models;
+using FrontEndAAUH.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,28 +23,34 @@ using Microsoft.Extensions.Logging;
 
 namespace FrontEndAAUH.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles = "Admin,ClinicProfessional,Secretary")]
     public class RegisterModel : PageModel
     {
+        private readonly IPatientService _patientService;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _configuration;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration iconfiguration)
         {
+            _patientService = new PatientService();
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _configuration = iconfiguration;
         }
 
         /// <summary>
@@ -97,6 +105,60 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
+            //Our own fields
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "FirstName")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "LastName")]
+            public string LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "StreetName")]
+            public string StreetName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "HouseNo")]
+            public string HouseNo { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "City")]
+            public string City { get; set; }
+
+            [Required]
+            [DataType(DataType.PostalCode)]
+            [Display(Name = "Zipcode")]
+            public string Zipcode { get; set; }
+
+            [Required]
+            [Phone]
+            [Display(Name = "PhoneNo")]
+            public string PhoneNo { get; set; }
+
+            [Required]
+            [DataType(DataType.Date)]
+            [Display(Name = "Date of Birth")]
+            public string DateOfBirth { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "CPR")]
+            public string CPR { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Profession")]
+            public string Profession { get; set; }
+
+
         }
 
 
@@ -112,6 +174,26 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                try {
+                    Address address = new Address(Input.StreetName, Input.HouseNo, Input.Zipcode, Input.City);
+                    Person person = new Person();
+                    person.firstName = Input.FirstName;
+                    person.lastName = Input.LastName;
+                    person.email = Input.Email;
+                    person.address = address;
+                    person.phoneNo = Input.PhoneNo;
+                    person.dateOfBirth = DateTime.Parse(Input.DateOfBirth);
+
+                    if (Input.CPR != null) { 
+                        Patient patient = new Patient(person.firstName, person.lastName, person.phoneNo, person.dateOfBirth, 0, person.email, person.address, Input.CPR);
+                        await _patientService.postPatient(patient);
+                    }
+                    
+                } catch (Exception) {
+
+                    return Page();
+                }
+
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

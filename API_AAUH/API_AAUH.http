@@ -1,0 +1,6 @@
+@API_AAUH_HostAddress = http://localhost:5125
+
+GET {{API_AAUH_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
