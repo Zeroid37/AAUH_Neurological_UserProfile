@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Exceptions\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\js\" />

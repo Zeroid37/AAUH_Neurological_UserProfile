@@ -1,4 +1,5 @@
-﻿using API_AAUH.Models;
+﻿using API_AAUH.Exceptions;
+using API_AAUH.Models;
 using Microsoft.Data.SqlClient;
 
 namespace API_AAUH.DB {
@@ -76,7 +77,7 @@ namespace API_AAUH.DB {
                         addPersonToDB(patient, con, transaction);
                         cmd.CommandText = addPatientToDBQuery;
                         cmd.Parameters.AddWithValue("EMAIL_FK", patient.email);
-                        cmd.Parameters.AddWithValue("CPR", patient.CPR);
+                        cmd.Parameters.AddWithValue("CPR", patient.cpr);
 
                         insertedRows = cmd.ExecuteNonQuery();
                         transaction.Commit();
@@ -111,24 +112,29 @@ namespace API_AAUH.DB {
                     cmdPatient.Parameters.AddWithValue("PATIENTNO", patientNo);
                     SqlDataReader readerPatient = cmdPatient.ExecuteReader();
                     while (readerPatient.Read()) {
-                        patient.CPR = readerPatient.GetString(readerPatient.GetOrdinal("cpr"));
+                        patient.cpr = readerPatient.GetString(readerPatient.GetOrdinal("cpr"));
                         patient.email = readerPatient.GetString(readerPatient.GetOrdinal("email_FK"));
                     }
-                    readerPatient.Close();
-                    cmdPerson.Parameters.AddWithValue("EMAIL", patient.email);
-                    SqlDataReader readerPerson = cmdPerson.ExecuteReader();
-                    while (readerPerson.Read()) {
-                        string firstName = readerPerson.GetString(readerPerson.GetOrdinal("firstName"));
-                        string lastName = readerPerson.GetString(readerPerson.GetOrdinal("lastName"));
-                        Address address = getAddressByAdressId(readerPerson.GetInt32(readerPerson.GetOrdinal("addressId_FK")));
-                        string phoneNo = readerPerson.GetString(readerPerson.GetOrdinal("phone"));
-                        DateTime dateOfBirth = readerPerson.GetDateTime(readerPerson.GetOrdinal("dateOfBirth"));
+                    if (patient.cpr != null) {
+                        readerPatient.Close();
+                        cmdPerson.Parameters.AddWithValue("EMAIL", patient.email);
+                        SqlDataReader readerPerson = cmdPerson.ExecuteReader();
+                        while (readerPerson.Read()) {
+                            string firstName = readerPerson.GetString(readerPerson.GetOrdinal("firstName"));
+                            string lastName = readerPerson.GetString(readerPerson.GetOrdinal("lastName"));
+                            Address address = getAddressByAdressId(readerPerson.GetInt32(readerPerson.GetOrdinal("addressId_FK")));
+                            string phoneNo = readerPerson.GetString(readerPerson.GetOrdinal("phone"));
+                            DateTime dateOfBirth = readerPerson.GetDateTime(readerPerson.GetOrdinal("dateOfBirth"));
 
-                        patient.firstName = firstName;
-                        patient.lastName = lastName;
-                        patient.phoneNo = phoneNo;
-                        patient.address = address;
-                        patient.dateOfBirth = dateOfBirth;
+                            patient.firstName = firstName;
+                            patient.lastName = lastName;
+                            patient.phoneNo = phoneNo;
+                            patient.address = address;
+                            patient.dateOfBirth = dateOfBirth;
+                        }
+                    } 
+                    else {
+                        patient = null;
                     }
                 }
             } catch (SqlException) {

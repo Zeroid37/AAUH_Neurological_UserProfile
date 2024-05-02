@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 namespace FrontEndAAUH.Model {
     public class Answer {
         public string answerText { get; set; }
+        [BindProperty]
         public bool isChosen { get; set; }
         public int answerValue { get; set; }
 
@@ -15,5 +17,7 @@ namespace FrontEndAAUH.Model {
             this.answerValue = answerValue;
             this.isChosen = false;
         }
+
+        public Answer() { }
     }
 }

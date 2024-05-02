@@ -1,0 +1,56 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+@using System.Text.RegularExpressions;
+@using System.Security.Claims;
+@model FrontEndAAUH.Models.QuestionnaireModel;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<head>
+    <link rel="stylesheet" href="~/css/UserProfile.css" type="text/css" />
+</head>
+@{
+    var usr = await UserManager.GetUserAsync(User);
+    var email = usr?.Email;
+}
+<!--TODO: Fjern '!' så man faktisk skal være logget ind-->
+@if (!SignInManager.IsSignedIn(User)) {
+    @if (!User.IsInRole("Admin") || User.IsInRole("ClinicProfessional")) {
+        <div class="patient">
+            <div class="info">
+                <label class="infoLabels">Fulde navn: @Model.patient.firstName @Model.patient.lastName </label>
+                <label class="infoLabels">Telefon nummer: @Model.patient.phoneNo</label>
+                <label class="infoLabels">Patient nummer: @Model.patient.patientNo</label>
+                <label class="infoLabels">Email: @Model.patient.email</label>
+                <label class="infoLabels">Addresse: @Model.patient.address.street @Model.patient.address.houseNo, @Model.patient.address.zip @Model.patient.address.city</label>
+                <label class="infoLabels">Fødselsdag: @Model.patient.dateOfBirth.ToShortDateString()</label>
+            </div>
+            <div class="profilBillede">
+                <img src="~/css/placeholder_man.jpg" />
+            </div>
+        </div>
+
+@*         @using (Html.BeginForm("SubmitQuestionnaire", "User")) {
+            <div>
+                <input type="text" asp-for="@Model.message"/>
+                <input type="submit" class="btn btn-primary btn-sm" value="SubmitQuestionnaire" />
+            </div>
+        } *@
+
+        @using (Html.BeginForm("SubmitQuestionnaire", "User")) {
+            <div>
+                <input type="text" asp-for="@Model.patient.firstName" />
+                <input type="submit" />
+            </div>
+            }
+
+
+
+
+        <div class="questionnaire">
+            <div class="editUserButtons">
+
+            </div>
+
+        </div>
+    }
+}

@@ -1,9 +1,10 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿﻿@using Microsoft.AspNetCore.Identity
 @using System.Text.RegularExpressions;
 @using System.Security.Claims;
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @model FrontEndAAUH.Models.Patient
+
 
 <head>
     <link rel="stylesheet" href="~/css/UserProfile.css" type="text/css" />
@@ -42,64 +43,56 @@
                 </div>
             }
         </div>
-        int questionNumber = 0;
+
         @using (Html.BeginForm("Submit", "User")) {
-            @foreach (var questionnaire in Model.questionnaires) {
+            @for (int qn = 0; qn < Model.questionnaires.Count; qn++) {
                 <div class="questionnaire">
-                    <h1>@Html.DisplayFor(qn => questionnaire.title)</h1>
-                    @foreach (var question in questionnaire.questions) {
-                        string dataGroup = $"fieldset_group_{questionNumber}";
-                        <fieldset>
-                            <legend>@Html.DisplayFor(description => question.questionDescription)</legend>
-                            @foreach (var answer in question.answers) {
-                                string inputName = $"question_{questionNumber}";
-                                <input type="radio" name="@inputName" id="@questionNumber" value="@answer.answerText" />
-                                <label for="@answer.answerText"> @answer.answerText</label>
-                                <br />
-                            }
-                        </fieldset>
-                        questionNumber++;
-                    }
+                @for (int q = 0; q < Model.questionnaires[qn].questions.Count; q++) {
+                    <fieldset>
+                        <legend>@Html.DisplayFor(qDesc => Model.questionnaires[qn].questions[q].questionDescription)</legend>
+                        @for (int a = 0; a < Model.questionnaires[qn].questions[q].answers.Count; a++) {
+
+
+                            <input type="radio" , asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex", value="@a" , checked="@Model.questionnaires[qn].questions[q].answers[a].isChosen" />
+
+                            @Model.questionnaires[qn].questions[q].answers[a].answerText;
+
+                            @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].answerValue);
+                            @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].answerText);
+                            <br />
+                        }
+                    </fieldset>
+                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].questionDescription)
+                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.flagDescription)
+                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.flagName)
+                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.flagRaised)
+                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.alertLevel)
+                }
                     <input type="submit" class="btn btn-primary btn-sm" value="Submit" />
                 </div>
+            @Html.HiddenFor(m => m.questionnaires[qn].flags)
             }
-            <input type="hidden" asp-for="firstName" value="@Model.firstName" />
-            <input type="hidden" asp-for="lastName" , value="@Model.lastName" />
-            <input type="hidden" asp-for="phoneNo" , value="@Model.phoneNo" />
-            <input type="hidden" asp-for="patientNo" , value="@Model.patientNo" />
-            <input type="hidden" asp-for="email" , value="@Model.email" />
-            <input type="hidden" asp-for="address.street" , value="@Model.address.street" />
-            <input type="hidden" asp-for="address.houseNo" , value="@Model.address.houseNo" />
-            <input type="hidden" asp-for="address.zip" , value="@Model.address.zip" />
-            <input type="hidden" asp-for="address.city" , value="@Model.address.city" />
-            <input type="hidden" asp-for="dateOfBirth" , value="@Model.dateOfBirth" />
-            <input type="hidden" asp-for="cpr" , value="@Model.cpr" />
-            <input type="hidden" asp-for="questionnaires" , value="@Model.questionnaires" />
-
-            @for (int i = 0; i<Model.questionnaires.Count; i++) {
-                @Html.HiddenFor(model => model.questionnaires[i])
-            }
-        }
+        @Html.HiddenFor(m => Model.firstName);
+        @Html.HiddenFor(m => Model.lastName);
+        @Html.HiddenFor(m => Model.phoneNo);
+        @Html.HiddenFor(m => Model.patientNo);
+        @Html.HiddenFor(m => Model.email);
+        @Html.HiddenFor(m => Model.address.street);
+        @Html.HiddenFor(m => Model.address.houseNo);
+        @Html.HiddenFor(m => Model.address.zip);
+        @Html.HiddenFor(m => Model.address.city);
+        @Html.HiddenFor(m => Model.dateOfBirth);
+        @Html.HiddenFor(m => Model.cpr);
     }
 }
-else {
+
+
+
+    <div>
+        <a href="/User/EditUserQuestionnaire/@Model.patientNo">
+            <button type="button">Rediger Spørgeskema</button>
+        </a>
+    </div>
+} else {
     <label class="noAccessError">Adgang Nægtet til dette data</label>
-}
-
-
-@section Scripts {
-    <script>
-        function Calculate() {
-            console.log("hej");
-            //debugger; //TODO: Remove lol
-            for(let i = 0; i<@questionsCount; i++){
-                var currField = document.getElementsByName('question_'+i);
-                for (let x = 0; x < currField.length; x++) {
-                    if (currField[x].type === "radio" && currField[x].checked) {
-                        console.log(currField[x].value + " count: " + x);
-                    }
-                }
-            }
-        }
-    </script>
 }
