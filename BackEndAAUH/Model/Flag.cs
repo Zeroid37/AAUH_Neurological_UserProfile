@@ -13,12 +13,18 @@ namespace BackEndAAUH.Model {
         public string alertLevel { get; set; }
 
         public Flag() { }
+        public Flag(string flagName, string flagDescription, bool flagRaised) {
+            this.flagName = flagName;
+            this.flagDescription = flagDescription;
+            this.flagRaised = flagRaised;
+            this.alertLevel = "0";
+        }
         public Flag(string id, string flagName, string flagDescription,  bool flagRaised) {
             this.id = id;
             this.flagName = flagName;
             this.flagDescription = flagDescription;
             this.flagRaised = flagRaised;
-            this.alertLevel = "-1";
+            this.alertLevel = "0";
         }
     }
 }

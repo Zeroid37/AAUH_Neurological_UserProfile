@@ -16,10 +16,10 @@ namespace BackEndAAUH.DB {
             connectionString = "data Source=127.0.0.1,1433; Database=AAUH; user=sa; password=secret;";
         }
 
-        public bool addFlagToDB(Flag flag) {
-            int insertedRowsNo = 0;
+        public int addFlagToDB(Flag flag) {
+            int returnedId = -1;
             string addFlagToDBQueryString = "insert into Flag(flagName, flagDescription, flagRaised, flagAlertLevel)" +
-                                            "values(@FLAGNAME, @FLAGDESC, @FLAGRAISED, @FLAGALERT)";
+                                            "values(@FLAGNAME, @FLAGDESC, @FLAGRAISED, @FLAGALERT); SELECT CAST(scope_identity() AS int)";
 
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(addFlagToDBQueryString, con)) {
@@ -29,9 +29,9 @@ namespace BackEndAAUH.DB {
                 cmd.Parameters.AddWithValue("FLAGRAISED", flag.flagRaised);
                 cmd.Parameters.AddWithValue("FLAGALERT", flag.alertLevel);
 
-                insertedRowsNo = cmd.ExecuteNonQuery();
+                returnedId = (int)cmd.ExecuteScalar();
             }
-            return (insertedRowsNo > 0);
+            return returnedId;
         }
 
         public Flag getFlagById(int id) {

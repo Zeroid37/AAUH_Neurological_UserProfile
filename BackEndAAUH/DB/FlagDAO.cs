@@ -8,6 +8,6 @@ using BackEndAAUH.Model;
 namespace BackEndAAUH.DB {
     public interface FlagDAO {
         public Flag getFlagById(int id);
-        public bool addFlagToDB(Flag flag);
+        public int addFlagToDB(Flag flag);
     }
 }
