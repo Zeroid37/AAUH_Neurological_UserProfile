@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -184,9 +185,13 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
                     person.phoneNo = Input.PhoneNo;
                     person.dateOfBirth = DateTime.Parse(Input.DateOfBirth);
 
-                    if (Input.CPR != null) { 
+                    if (Input.CPR != null) {
                         Patient patient = new Patient(person.firstName, person.lastName, person.phoneNo, person.dateOfBirth, 0, person.email, person.address, Input.CPR);
+
                         await _patientService.postPatient(patient);
+                    }
+                    else if (Input.Profession != null) {
+                        //TODO: Create either medical secretary / clinical professional
                     }
                     
                 } catch (Exception) {
@@ -222,8 +227,9 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _userManager.AddToRoleAsync(user, "Patient");
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 foreach (var error in result.Errors)

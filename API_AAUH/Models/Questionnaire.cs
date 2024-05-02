@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FrontEndAAUH.Model {
+namespace API_AAUH.Model {
     public class Questionnaire {
         public string title { get; set; }
         public List<Question> questions { get; set; }
@@ -16,7 +16,6 @@ namespace FrontEndAAUH.Model {
             questions = new List<Question>();
             flags = new List<Flag>();
         }
-
 
         public Questionnaire() { 
         questions = new List<Question>();

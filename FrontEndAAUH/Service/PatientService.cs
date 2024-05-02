@@ -1,4 +1,5 @@
-﻿using FrontEndAAUH.Models;
+﻿using FrontEndAAUH.Model;
+using FrontEndAAUH.Models;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -30,9 +31,6 @@ namespace FrontEndAAUH.Service {
                     throw;
                 }
             }
-
-
-            
             return patient;
         }
 
@@ -45,27 +43,16 @@ namespace FrontEndAAUH.Service {
 
             if (_connection != null) {
                 try {
-                    Address address = new Address("Street", "HouseNo", "8473", "Vordingborg");
-                    Patient p = new Patient("Jens", "Larsen", "12345678", DateTime.Now, 0, "Jens@jens", address, "12345674332");
-
-
                     var s = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat };
-                    var json = JsonConvert.SerializeObject(p, s);
+                    var json = JsonConvert.SerializeObject(patient);
 
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var res = content.ReadAsStringAsync().Result; //TODO: Delete after debug
                     var response = await _connection.servicePost(content);
 
-
-                    //var json = JsonConvert.SerializeObject(patient, s);
-                    //var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    //var res = content.ReadAsStringAsync().Result; //TODO: Delete after debug
-                    //var response = await _connection.servicePost(content);
                     if (response != null && response.IsSuccessStatusCode) {
                         ok = true;
                     }
-                } catch (Exception e) {
+                } catch (Exception) {
                     throw;
                 }
             }

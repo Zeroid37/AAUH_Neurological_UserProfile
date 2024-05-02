@@ -1,18 +1,23 @@
-﻿namespace API_AAUH.Models {
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace API_AAUH.Model {
     public class Answer {
         public string answerText { get; set; }
+        [BindProperty]
         public bool isChosen { get; set; }
-        public Answer(string answerText) {
+        public int answerValue { get; set; }
+
+        public Answer(string answerText, int answerValue) {
             this.answerText = answerText;
-            isChosen = false;
-        }
-        public Answer(string answerText, bool isChosen) {
-            this.answerText = answerText;
-            this.isChosen = isChosen;
+            this.answerValue = answerValue;
+            this.isChosen = false;
         }
 
-        public void setChosen() {
-            isChosen = true;
-        }
+        public Answer() { }
     }
 }

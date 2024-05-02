@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Text.RegularExpressions;
+@using System.Security.Claims;
+@model FrontEndAAUH.Models.Patient;
+
+
+@{
+    ViewBag.Title = "Test";
+}
+
+@Html.BeginForm("Submit", "Test") {
+<table>
+
+    <tr>
+        <td>
+            @for (int qn = 0; qn < Model.questionnaires.Count; qn++) {
+                for (int q = 0; q < Model.questionnaires[qn].questions.Count; q++) {
+                    for (int a = 0; a < Model.questionnaires[qn].questions[q].answers.Count; a++) {
+                        @Html.CheckBoxFor(m => Model.questionnaires[qn].questions[q].answers[a].isChosen);
+                        @Model.questionnaires[qn].questions[q].answers[a].answerText;
+
+                        @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].answerValue);
+                        @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].answerText);
+
+                    }
+                }
+            }
+        </td>
+    </tr>
+</table>
+<input type="submit" value="submit" />
+}
+<p>@ViewBag.selectAnswers</p>

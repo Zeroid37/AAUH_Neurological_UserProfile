@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace FrontEndAAUH.Model {
     public class Question {
-        public string id { get; set; }
         public string questionDescription { get; set; }
         public Flag flag { get; set; }
         public List<Answer> answers { get; set; }
-
+        public string chosenAnswerIndex { get; set; }
         public Question() { 
             this.answers = new List<Answer>();
         }
-        public Question(string id, string questionTitle, Flag flag, List<Answer> answers) {
-            this.id = id;
+
+        public Question(string questionTitle, Flag flag, List<Answer> answers) {
+            this.answers = new List<Answer>();
             this.questionDescription = questionTitle;
             this.flag = flag;
             this.answers = answers;

@@ -1,4 +1,5 @@
-﻿namespace API_AAUH.Models {
+﻿
+namespace API_AAUH.Models {
     public class ClinicProfessional : Person {
         public string employeeNo { get; set; }
         public string profession {  get; set; }

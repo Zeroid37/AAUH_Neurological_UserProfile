@@ -27,7 +27,8 @@ namespace API_AAUH.Controllers {
         public async Task<ActionResult> Post([FromBody] Patient patient) {
             ActionResult foundReturn;
             PersonLogic PL = new PersonLogic(_configuration);
-            bool ok = false;
+            
+            bool ok = PL.addPatientToDB(patient);
             if (ok) {
                 foundReturn = Ok();
             }
