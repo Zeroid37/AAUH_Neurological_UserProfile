@@ -10,6 +10,7 @@ namespace FrontEndAAUH.Model {
         public string title { get; set; }
         public List<Question> questions { get; set; }
         public List<Flag> flags;
+        public bool isChosen { get; set; }
 
         public Questionnaire(string title) {
             this.title = title;

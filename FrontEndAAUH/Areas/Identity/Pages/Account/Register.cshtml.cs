@@ -11,8 +11,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using FrontEndAAUH.BusinessLogic;
 using FrontEndAAUH.Models;
-using FrontEndAAUH.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,14 +27,14 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
     [Authorize(Roles = "Admin,ClinicProfessional,Secretary")]
     public class RegisterModel : PageModel
     {
-        private readonly IPatientService _patientService;
+        private readonly PatientLogic pLogic;
+        private readonly IConfiguration _configuration;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IConfiguration _configuration;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -44,7 +44,7 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
             IEmailSender emailSender,
             IConfiguration iconfiguration)
         {
-            _patientService = new PatientService();
+            pLogic = new PatientLogic(_configuration);
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -188,7 +188,7 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
                     if (Input.CPR != null) {
                         Patient patient = new Patient(person.firstName, person.lastName, person.phoneNo, person.dateOfBirth, 0, person.email, person.address, Input.CPR);
 
-                        await _patientService.postPatient(patient);
+                        pLogic.addPatientToDB(patient);
                     }
                     else if (Input.Profession != null) {
                         //TODO: Create either medical secretary / clinical professional

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace FrontEndAAUH.Model {
     public class Answer {
+        public int id {  get; set; }
         public string answerText { get; set; }
         [BindProperty]
         public bool isChosen { get; set; }

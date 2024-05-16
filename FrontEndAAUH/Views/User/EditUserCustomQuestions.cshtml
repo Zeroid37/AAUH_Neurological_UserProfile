@@ -1,0 +1,57 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+@using System.Text.RegularExpressions;
+@using System.Security.Claims;
+@model FrontEndAAUH.Models.CustomQuestionModel;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<head>
+    <link rel="stylesheet" href="~/css/UserProfile.css" type="text/css" />
+</head>
+@{
+    var usr = await UserManager.GetUserAsync(User);
+    var email = usr?.Email;
+}
+<!--TODO: Fjern '!' så man faktisk skal være logget ind-->
+@if (!SignInManager.IsSignedIn(User)) {
+    @if (!User.IsInRole("Admin") || User.IsInRole("ClinicProfessional")) {
+        <div class="patient">
+            <div class="info">
+                <label class="infoLabels">Fulde navn: @Model.patient.firstName @Model.patient.lastName </label>
+                <label class="infoLabels">Telefon nummer: @Model.patient.phoneNo</label>
+                <label class="infoLabels">Patient nummer: @Model.patient.patientNo</label>
+                <label class="infoLabels">Email: @Model.patient.email</label>
+                <label class="infoLabels">
+                    Addresse: @Model.patient.address.street @Model.patient.address.houseNo,
+                    @Model.patient.address.zip @Model.patient.address.city
+                </label>
+                <label class="infoLabels">Fødselsdag: @Model.patient.dateOfBirth.ToShortDateString()</label>
+            </div>
+            <div class="profilBillede">
+                <img src="~/css/placeholder_man.jpg" />
+            </div>
+        </div>
+
+        <div class="editUser">
+            @using (Html.BeginForm("editQuestion", "User")) {
+                for (int qn = 0; qn < Model.patient.questionnaires.Count; qn++) {
+                    if (Model.patient.questionnaires[qn].title.Equals("All around questionnaire")) {
+                        for (int q = 0; q < Model.patient.questionnaires[qn].questions.Count(); q++) {
+                            <div class="questions">
+                                @Model.patient.questionnaires[qn].questions[q].questionDescription
+                                <label>
+                                    <input type="radio" value="@q" id="questionRadio" onclick="this.form.submit()" name="questionIndex" />
+                                    Rediger Spørgsmål
+                                </label>
+                                @Html.HiddenFor(m => Model.patient.questionnaires[qn].questions[q].id)
+                                @Html.HiddenFor(m => Model.patient.questionnaires[qn].questions[q].questionDescription)
+                                @Html.HiddenFor(m => Model.patient.questionnaires[qn].questions[q].answers)
+                            </div>
+                        }
+                    }
+                }
+                @Html.HiddenFor(m => Model.patient.patientNo);
+            }
+        </div>
+    }
+}
