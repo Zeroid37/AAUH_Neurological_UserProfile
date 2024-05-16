@@ -14,12 +14,19 @@ namespace BackEndAAUH.Model {
         public Question() { 
             this.answers = new List<Answer>();
         }
-        public Question(string id, string questionTitle, Flag flag, List<Answer> answers) {
-            this.id = id;
+
+        public Question(string questionDescription, Flag flag) {
+            this.answers = new List<Answer>();
+            this.questionDescription = questionDescription;
+            this.flag = flag;
+        }
+
+        public Question(string questionTitle, Flag flag, List<Answer> answers) {
             this.questionDescription = questionTitle;
             this.flag = flag;
             this.answers = answers;
         }
+
         public int findHighestPoints() {
             int highest = 0;
             foreach(Answer answer in answers) {
@@ -28,6 +35,10 @@ namespace BackEndAAUH.Model {
                 }
             }
             return highest;
+        }
+
+        public void addAnswer(Answer answer) {
+            answers.Add(answer);
         }
     }
 }
