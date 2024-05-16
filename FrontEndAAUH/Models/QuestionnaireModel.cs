@@ -4,9 +4,12 @@ namespace FrontEndAAUH.Models {
     public class QuestionnaireModel {
 
         public Patient patient { get; set; }
-        public Questionnaire Questionnaire { get; set; }
+        public List<Questionnaire> questionnaires { get; set; }
+        public Question Question { get; set; }
+        public Answer answer { get; set; }
 
 
-        public QuestionnaireModel() { }
+        public QuestionnaireModel() { 
+        }
     }
 }

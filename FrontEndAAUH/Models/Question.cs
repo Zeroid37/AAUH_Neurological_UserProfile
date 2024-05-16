@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FrontEndAAUH.Model {
     public class Question {
+        public int id { get; set; }
         public string questionDescription { get; set; }
         public Flag flag { get; set; }
         public List<Answer> answers { get; set; }

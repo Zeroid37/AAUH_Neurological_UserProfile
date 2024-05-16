@@ -21,7 +21,8 @@
                 <label class="infoLabels">Telefon nummer: @Model.patient.phoneNo</label>
                 <label class="infoLabels">Patient nummer: @Model.patient.patientNo</label>
                 <label class="infoLabels">Email: @Model.patient.email</label>
-                <label class="infoLabels">Addresse: @Model.patient.address.street @Model.patient.address.houseNo, @Model.patient.address.zip @Model.patient.address.city</label>
+                <label class="infoLabels">Addresse: @Model.patient.address.street @Model.patient.address.houseNo,
+                                                    @Model.patient.address.zip @Model.patient.address.city</label>
                 <label class="infoLabels">Fødselsdag: @Model.patient.dateOfBirth.ToShortDateString()</label>
             </div>
             <div class="profilBillede">
@@ -29,28 +30,45 @@
             </div>
         </div>
 
-@*         @using (Html.BeginForm("SubmitQuestionnaire", "User")) {
-            <div>
-                <input type="text" asp-for="@Model.message"/>
-                <input type="submit" class="btn btn-primary btn-sm" value="SubmitQuestionnaire" />
+
+        <div class="editUser">
+            <div class="currentQuestionnaires">
+                <h4 id="userHeader">Nuværende Spørgeskemaer</h4>
+                @using (Html.BeginForm("editCurrentQuestionnaire", "User")){
+                    @for (int i = 0; i<Model.patient.questionnaires.Count; i++) {
+                        string checkBoxName = $"qnCheckbox{i % 2}";
+                        <div id="@checkBoxName">
+                            <label id="qnTitle">@Model.patient.questionnaires[i].title</label>
+                            @Html.CheckBoxFor(m => m.patient.questionnaires[i].isChosen)
+                        </div>
+                    }
+                    @Html.HiddenFor(m => m.patient.patientNo)
+                    <input type="submit" class="btn btn-primary btn-sm" value="Fjern Valgte" id="currQnSubmit"/>
+                }
             </div>
-        } *@
+            <div class="addQuestionnaires">
+                <h4 id="userHeader">Tilføj Spørgeskema</h4>
+                @using (Html.BeginForm("addQuestionnaire", "User")) {
 
-        @using (Html.BeginForm("SubmitQuestionnaire", "User")) {
-            <div>
-                <input type="text" asp-for="@Model.patient.firstName" />
-                <input type="submit" />
+
+
+                    @Html.HiddenFor(m => m.patient.patientNo)
+                    <input type="submit" class="btn btn-primary btn-sm" value="Tilføj Valgte" id="currQnSubmit" />
+                }
             </div>
-            }
-
-
-
-
-        <div class="questionnaire">
-            <div class="editUserButtons">
-
-            </div>
-
         </div>
     }
+}
+
+@section Scripts {
+    <script>
+        var labelAndTextFieldCount = 1;
+        var labelAndTextFieldName = 0;
+
+        function() {
+            var labelAndTextFieldName = "svarbox" + labelAndTextFieldCount;
+            document.getElementById('svarMulighed').innerHTML+='<br /><label>Svar mulighed'+labelAndTextFieldCount' </label>'
+        }
+
+    </script>
 }

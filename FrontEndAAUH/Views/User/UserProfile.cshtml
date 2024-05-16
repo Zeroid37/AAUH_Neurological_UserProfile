@@ -41,6 +41,18 @@
                 <div class="flags">
                     <p>FLAGS</p>
                 </div>
+
+                <div class="userProfileButtons">
+                    <a href="/User/EditUserQuestionnaire/@Model.patientNo">
+                        <button type="button">Rediger Spørgeskemaer</button>
+                    </a>
+                    <a href="/User/EditUserCustomQuestions/@Model.patientNo">
+                        <button type="button">Rediger Spørgsmål</button>
+                    </a>
+
+                </div>
+            
+            
             }
         </div>
 
@@ -51,9 +63,7 @@
                     <fieldset>
                         <legend>@Html.DisplayFor(qDesc => Model.questionnaires[qn].questions[q].questionDescription)</legend>
                         @for (int a = 0; a < Model.questionnaires[qn].questions[q].answers.Count; a++) {
-
-
-                            <input type="radio" , asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex", value="@a" , checked="@Model.questionnaires[qn].questions[q].answers[a].isChosen" />
+                            <input type="radio" asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex" value="@a" checked="@Model.questionnaires[qn].questions[q].answers[a].isChosen" />
 
                             @Model.questionnaires[qn].questions[q].answers[a].answerText;
 
@@ -88,11 +98,7 @@
 
 
 
-    <div>
-        <a href="/User/EditUserQuestionnaire/@Model.patientNo">
-            <button type="button">Rediger Spørgeskema</button>
-        </a>
-    </div>
+    
 } else {
     <label class="noAccessError">Adgang Nægtet til dette data</label>
 }
