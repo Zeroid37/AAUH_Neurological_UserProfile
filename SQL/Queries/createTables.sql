@@ -137,3 +137,17 @@ create table QuestionnaireFlag(
 	flagID_FK int not null foreign key references Flag(id),
 	PRIMARY KEY(questionnaireID_FK, flagID_FK)
 )
+
+--PatientAnswer
+create table PatientAnswer(
+	patientNo_FK int not null foreign key references Patient(patientNo),
+	answerID_FK int not null foreign key references Answer(id),
+	answerUpdated DATE not null
+)
+
+--PatientFlag
+create table PatientFlag(
+	patientNo_FK int not null foreign key references Patient(patientNo),
+	flagID_FK int not null foreign key references Flag(id),
+	flagStage int not null
+)

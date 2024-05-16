@@ -10,7 +10,5 @@ namespace FlagAPI.DB {
         public Flag getFlagById(int id);
         public int addFlagToDB(Flag flag);
         public List<PatientAnswer> getNewPatientAnswers(DateOnly lastRead);
-        public bool updatePatientFlagLevel(int patientNo, string flagID, int flagStage);
-        public bool updatePatientAnswerTime(PatientAnswer patientAnswer, DateOnly dateNow);
     }
 }

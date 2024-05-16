@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using BackEndAAUH.DB;
-using BackEndAAUH.Model;
+using FlagAPI.DB;
+using FlagAPI.Model;
+using FlagAPI.Business;
 
 Console.WriteLine("Hello, World!");
 
@@ -14,6 +15,7 @@ Flag KidneyDiseaseFlag = new Flag("Kidney Disease", "Kidney Disease flag", false
 
 
 Questionnaire IHD = new Questionnaire("Ischeamic Heart Disease");
+IHD.addFlag(IHDFlag);
 Question IHDq1 = new Question("Vurder din smerte i brystet, specielt efter fysisk træning. (0 hvis du ingen smerte har)", IHDFlag);
 IHDq1.addAnswer(new Answer("0", 0));
 IHDq1.addAnswer(new Answer("1", 1));
@@ -56,6 +58,7 @@ IHD.addQuestion(IHDq5);
 
 
 Questionnaire Stroke = new Questionnaire("Stroke");
+Stroke.addFlag(StrokeFlag);
 Question Strokeq1 = new Question("Hvad er dit blodtryk på?", StrokeFlag);
 Strokeq1.addAnswer(new Answer("Mindre end 120/80", 0));
 Strokeq1.addAnswer(new Answer("120-139/80-89", 1));
@@ -109,6 +112,7 @@ Stroke.addQuestion(Strokeq8);
 
 
 Questionnaire COPD = new Questionnaire("Chronic Obstructive Pulmonary Disease");
+COPD.addFlag(COPDFlag);
 Question COPDq1 = new Question("Hvor ofte hoster du?", COPDFlag);
 COPDq1.addAnswer(new Answer("Aldrig", 0));
 COPDq1.addAnswer(new Answer("Enkelte gange", 1));
@@ -165,7 +169,8 @@ COPD.addQuestion(COPDq6);
 
 
 
-Questionnaire LungCancers = new Questionnaire("Tachea, bronchus, lung cancers");
+Questionnaire LungCancer = new Questionnaire("Tachea, bronchus, lung cancers");
+LungCancer.addFlag(LungCancerFlag);
 Question LungCancerq1 = new Question("Hvor ofte hoster du?", COPDFlag);
 LungCancerq1.addAnswer(new Answer("Aldrig", 0));
 LungCancerq1.addAnswer(new Answer("Enkelte gange", 1));
@@ -221,18 +226,19 @@ LungCancerq8.addAnswer(new Answer("Til tider", 1));
 LungCancerq8.addAnswer(new Answer("Ofte", 2));
 LungCancerq8.addAnswer(new Answer("Konstant", 3));
 
-LungCancers.addQuestion(LungCancerq1);
-LungCancers.addQuestion(LungCancerq2);
-LungCancers.addQuestion(LungCancerq3);
-LungCancers.addQuestion(LungCancerq4);
-LungCancers.addQuestion(LungCancerq5);
-LungCancers.addQuestion(LungCancerq6);
-LungCancers.addQuestion(LungCancerq7);
-LungCancers.addQuestion(LungCancerq8);
+LungCancer.addQuestion(LungCancerq1);
+LungCancer.addQuestion(LungCancerq2);
+LungCancer.addQuestion(LungCancerq3);
+LungCancer.addQuestion(LungCancerq4);
+LungCancer.addQuestion(LungCancerq5);
+LungCancer.addQuestion(LungCancerq6);
+LungCancer.addQuestion(LungCancerq7);
+LungCancer.addQuestion(LungCancerq8);
 
 
 
 Questionnaire Prediabetes = new Questionnaire("Prediabetes");
+Prediabetes.addFlag(PrediabetesFlag);
 Question Prediabetesq1 = new Question("Har du en mor, far, søster eller bror med diabetes?", PrediabetesFlag);
 Prediabetesq1.addAnswer(new Answer("Nej", 0));
 Prediabetesq1.addAnswer(new Answer("Ja", 1));
@@ -271,6 +277,7 @@ Prediabetes.addQuestion(Prediabetesq6);
 
 
 Questionnaire Kidney = new Questionnaire("Kidney Diseases");
+Kidney.addFlag(KidneyDiseaseFlag);
 Question Kidneyq1 = new Question("Har din læge fået at vide, at du har nogen af følgende tilstande?", KidneyDiseaseFlag);
 Kidneyq1.addAnswer(new Answer("Diabetes eller at tage medicin for at kontrollere dit blodsukker", 4));
 Kidneyq1.addAnswer(new Answer("Prædiabetes", 3));
@@ -307,26 +314,44 @@ Kidney.addQuestion(Kidneyq5);
 
 
 FlagDB flagDB = new FlagDB();
-string IDHflagid = "" + flagDB.addFlagToDB(IHDFlag);
+string IDHflagid = flagDB.addFlagToDB(IHDFlag).ToString();
 IHDFlag.id = IDHflagid;
-string Strokeflagid = "" + flagDB.addFlagToDB(StrokeFlag);
+
+string Strokeflagid = flagDB.addFlagToDB(StrokeFlag).ToString();
 StrokeFlag.id = Strokeflagid;
-string COPDflagid = "" + flagDB.addFlagToDB(COPDFlag);
+
+string COPDflagid = flagDB.addFlagToDB(COPDFlag).ToString();
 COPDFlag.id = COPDflagid;
-string LungCancerflagid = "" + flagDB.addFlagToDB(LungCancerFlag);
+
+string LungCancerflagid = flagDB.addFlagToDB(LungCancerFlag).ToString();
 LungCancerFlag.id = LungCancerflagid;
-string Prediabetesflagid = "" + flagDB.addFlagToDB(PrediabetesFlag);
+
+string Prediabetesflagid = flagDB.addFlagToDB(PrediabetesFlag).ToString();
 PrediabetesFlag.id = Prediabetesflagid;
-string KidneyDiseaseflagid = "" + flagDB.addFlagToDB(KidneyDiseaseFlag);
+
+string KidneyDiseaseflagid = flagDB.addFlagToDB(KidneyDiseaseFlag).ToString();
 KidneyDiseaseFlag.id = KidneyDiseaseflagid;
 
 QuestionnaireDB qdb = new QuestionnaireDB();
-qdb.addQuestionnaireToDB(IHD);
-qdb.addQuestionnaireToDB(Stroke);
-qdb.addQuestionnaireToDB(COPD);
-qdb.addQuestionnaireToDB(LungCancers);
-qdb.addQuestionnaireToDB(Prediabetes);
-qdb.addQuestionnaireToDB(Kidney);
+//qdb.addQuestionnaireToDB(IHD);
+//qdb.addQuestionnaireToDB(Stroke);
+//qdb.addQuestionnaireToDB(COPD);
+//qdb.addQuestionnaireToDB(LungCancer);
+//qdb.addQuestionnaireToDB(Prediabetes);
+//qdb.addQuestionnaireToDB(Kidney);
+
+
+//Questionnaire qtest = qdb.getQuestionnaireByTitle(COPD.title);
+//Console.WriteLine(qtest.title);
+//foreach(Question question in qtest.questions) {
+//    Console.WriteLine($"\t{question.questionDescription}");
+//    foreach(Answer answer in question.answers) {
+//        Console.WriteLine($"\t\t{answer.answerText} - value: {answer.answerValue} | {answer.isChosen}");
+//    }
+//    Console.WriteLine("");
+//}
+
+
 
 //Answer answer1 = new Answer("Svar 1", 1);
 ////answer1.isChosen = true;
@@ -414,4 +439,9 @@ qdb.addQuestionnaireToDB(Kidney);
 //questions.Add(question3);
 
 //QuestionDAO qdb = new QuestionDB();
-////qdb.addQuestionsToDB(questions, 1);
+//qdb.addQuestionsToDB(questions, 1);
+
+DateOnly lastRead = new DateOnly(2024, 1, 1); //TODO Remove dummy date
+
+FlagLogic fl = new FlagLogic();
+fl.processFlags(lastRead);
