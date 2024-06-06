@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace FlagAPI.Model {
     public class PatientAnswer {
-        public string patientNo;
-        public int answerID;
-        public PatientAnswer(string patientNo, int answerID) {
-            patientNo = patientNo;
-            answerID = answerID;
-        }
+        public int patientNo { get; set; }
+        public int answerID { get; set; }
+
+        public PatientAnswer() { }
     }
 }

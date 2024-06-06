@@ -38,8 +38,8 @@ namespace FlagAPI.DB {
             string getFlagByIdQueryString = "SELECT flagName, flagDescription, flagRaised, flagAlertLevel from Flag where id = @ID";
             Flag flag = new Flag();
 
-            using(SqlConnection con = new SqlConnection(connectionString))
-            using(SqlCommand cmd = new SqlCommand(getFlagByIdQueryString, con)) {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(getFlagByIdQueryString, con)) {
                 con.Open();
                 cmd.Parameters.AddWithValue("ID", id);
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -49,6 +49,7 @@ namespace FlagAPI.DB {
                     bool flagRaised = reader.GetBoolean(reader.GetOrdinal("flagRaised"));
                     String flagAlertLevel = reader.GetString(reader.GetOrdinal("flagAlertLevel"));
 
+                    flag.id = "" + id;
                     flag.flagName = flagName;
                     flag.flagDescription = flagDescription;
                     flag.flagRaised = flagRaised;
@@ -70,15 +71,48 @@ namespace FlagAPI.DB {
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read()) {
-                    string patientNo = reader.GetString(reader.GetOrdinal("patientNo_FK"));
+                    int patientNo = reader.GetInt32(reader.GetOrdinal("patientNo_FK"));
                     int answerID = reader.GetInt32(reader.GetOrdinal("answerID_FK"));
-                    PatientAnswer pa = new PatientAnswer(patientNo, answerID);
+
+                    PatientAnswer pa = new PatientAnswer();
+                    pa.patientNo = patientNo;
+                    pa.answerID = answerID;
                     patientAnswers.Add(pa);
                 }
-
             }
-
             return patientAnswers;
+        }
+
+        public bool updatePatientFlagLevel(int patientNo, string flagID, int flagStage) {
+            string updatePatientFlagQueryString = "UPDATE PatientFlag SET flagStage = @FLAGSTAGE WHERE patientNo_FK = @PATIENTNO AND flagID_FK = @FLAGID";
+            int updatedRowsNo = 0;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(updatePatientFlagQueryString, con)) {
+                con.Open();
+                cmd.Parameters.AddWithValue("FLAGSTAGE", flagStage);
+                cmd.Parameters.AddWithValue("PATIENTNO", patientNo);
+                cmd.Parameters.AddWithValue("FLAGID", flagID);
+                updatedRowsNo = cmd.ExecuteNonQuery();
+            }
+            return (updatedRowsNo > 0);
+        }
+
+        public bool updatePatientAnswerTime(PatientAnswer patientAnswer, DateOnly dateNow) {
+            string updatePatientAnswersTimeQueryString = "UPDATE PatientAnswer SET answerUpdated = @DATENOW " +
+                                                         "WHERE patientNo_FK = @PATIENTNO AND answerID_FK = @ANSWERID";
+            int updatedRowsNo = 0;
+            DateTime dateTimeNow = dateNow.ToDateTime(TimeOnly.Parse("0:00 AM"));
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(updatePatientAnswersTimeQueryString, con)) {
+                con.Open();
+                cmd.Parameters.AddWithValue("PATIENTNO", patientAnswer.patientNo);
+                cmd.Parameters.AddWithValue("ANSWERID", patientAnswer.answerID);
+                cmd.Parameters.AddWithValue("DATENOW", dateTimeNow);
+                updatedRowsNo = cmd.ExecuteNonQuery();
+            }
+            return (updatedRowsNo > 0);
         }
     }
 }

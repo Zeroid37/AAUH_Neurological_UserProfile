@@ -38,7 +38,7 @@ namespace FlagAPI.DB {
         public bool addQuestionToDB(Question question, int questionnaireID, SqlConnection con, SqlTransaction transaction) {
             int insertedRowsNo = 0;
             int questionID = -1;
-            string addQuestionToDBQueryString = "INSERT into Question(questionDescription, flagID_FK, questionnaireID_FK)" +
+            string addQuestionToDBQueryString = "INSERT into Question(questionDescription, questionnaireID_FK)" +
                                                 "values(@QUESTIONDESC, @QUESTIONNAIREFK); SELECT CAST(scope_identity() AS int)";
 
             using (SqlCommand cmd = new SqlCommand(addQuestionToDBQueryString, con, transaction)) {
@@ -47,7 +47,7 @@ namespace FlagAPI.DB {
                     cmd.Parameters.AddWithValue("QUESTIONNAIREFK", questionnaireID);
 
                     questionID = (int)cmd.ExecuteScalar();
-                    foreach(Answer answer in question.answers) {
+                    foreach (Answer answer in question.answers) {
                         addAnswerToDB(answer, questionID, con, transaction);
                     }
                     insertedRowsNo = 1;
@@ -60,17 +60,16 @@ namespace FlagAPI.DB {
         }
 
         public List<Question> getQuestionsByQuestionnaireID(int questionnaireId) {
-            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription, FROM Question " +
+            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription FROM Question " +
                                                               "WHERE questionnaireID_FK = @QUESTIONNAIREFK";
-            FlagDAO flagdb = new FlagDB();
             List<Question> questions = new List<Question>();
 
-            using(SqlConnection con = new SqlConnection(connectionString))
-            using(SqlCommand cmd = new SqlCommand(getQuestionsByQuestionnaireIDQueryString, con)) {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(getQuestionsByQuestionnaireIDQueryString, con)) {
                 con.Open();
                 cmd.Parameters.AddWithValue("QUESTIONNAIREFK", questionnaireId);
                 SqlDataReader reader = cmd.ExecuteReader();
-                while(reader.Read()) {
+                while (reader.Read()) {
                     int questionID = reader.GetInt32(reader.GetOrdinal("id"));
                     string questionDescription = reader.GetString(reader.GetOrdinal("questionDescription"));
                     List<Answer> answers = getAnswersByQuestionID(questionID);
@@ -78,7 +77,7 @@ namespace FlagAPI.DB {
                     Question question = new Question();
                     question.id = questionID.ToString();
                     question.questionDescription = questionDescription;
-                    foreach(Answer answer in answers) { 
+                    foreach (Answer answer in answers) {
                         question.addAnswer(answer);
                     }
                     questions.Add(question);
@@ -130,12 +129,12 @@ namespace FlagAPI.DB {
                                                        "Answer WHERE questionID_FK = @QUESTIONFK";
             List<Answer> answers = new List<Answer>();
 
-            using(SqlConnection con = new SqlConnection(connectionString))
-            using(SqlCommand cmd = new SqlCommand(getAnswersByQuestionIDQueryString, con)) {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(getAnswersByQuestionIDQueryString, con)) {
                 con.Open();
                 cmd.Parameters.AddWithValue("QUESTIONFK", questionID);
                 SqlDataReader reader = cmd.ExecuteReader();
-                while(reader.Read()) {
+                while (reader.Read()) {
                     string answerText = reader.GetString(reader.GetOrdinal("answerText"));
                     bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
                     int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
@@ -145,6 +144,60 @@ namespace FlagAPI.DB {
                 }
             }
             return answers;
+        }
+
+        public int getQuestionnaireIDByQuestionID(int questionid) {
+            string getQuestionnaireIDByQuestionIDQueryString = "SELECT questionnaireID_FK FROM Question where id = @QUESTIONID";
+            int result = -1;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(getQuestionnaireIDByQuestionIDQueryString, con)) {
+                con.Open();
+                cmd.Parameters.AddWithValue("QUESTIONID", questionid);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read()) {
+                    result = reader.GetInt32(reader.GetOrdinal("questionnaireID_FK"));
+                }
+            }
+            return result;
+        }
+
+        public int getQuestionIDByAnswerID(int answerID) {
+            string getQuestionIDByAnswerIDQueryString = "SELECT questionID_FK from Answer where id = @ANSWERID";
+            int result = -1;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(getQuestionIDByAnswerIDQueryString, con)) {
+                con.Open();
+                cmd.Parameters.AddWithValue("ANSWERID", answerID);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read()) {
+                    result = reader.GetInt32(reader.GetOrdinal("questionID_FK"));
+                }
+            }
+            return result;
+        }
+
+        public Answer getAnswerByAnswerID(int answerID) {
+            string getAnswerByAnswerIDQueryString = "SELECT answerText, isChosen, answerValue from Answer where id = @ANSWERID";
+            Answer answer = new Answer();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(getAnswerByAnswerIDQueryString, con)) {
+                con.Open();
+                cmd.Parameters.AddWithValue("ANSWERID", answerID);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read()) {
+                    string answerText = reader.GetString(reader.GetOrdinal("answerText"));
+                    bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
+                    int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
+
+                    answer.answerText = answerText;
+                    answer.isChosen = isChosen;
+                    answer.answerValue = answerValue;
+                }
+                return answer;
+            }
         }
     }
 }

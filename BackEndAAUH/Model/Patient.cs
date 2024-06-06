@@ -1,5 +1,4 @@
-﻿
-using BackEndAAUH.Model;
+﻿using BackEndAAUH.Model;
 
 namespace BackEndAAUH.Model {
     public class Patient : Person {

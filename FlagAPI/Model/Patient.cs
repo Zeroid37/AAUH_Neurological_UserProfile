@@ -1,5 +1,4 @@
-﻿
-using FlagAPI.Model;
+﻿using FlagAPI.Model;
 
 namespace FlagAPI.Model {
     public class Patient : Person {

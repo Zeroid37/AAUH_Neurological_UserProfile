@@ -53,7 +53,7 @@ namespace FlagAPI.DB {
             int insertedRowsNo = 0;
             string addToQuestionnaireFlagTableQueryString = "INSERT into QuestionnaireFlag(questionnaireID_FK, flagID_FK) values(@QUESTIONNAIREFK, @FLAGFK)";
 
-            using(SqlCommand cmd = new SqlCommand(addToQuestionnaireFlagTableQueryString, con, transaction)) {
+            using (SqlCommand cmd = new SqlCommand(addToQuestionnaireFlagTableQueryString, con, transaction)) {
                 cmd.Parameters.AddWithValue("QUESTIONNAIREFK", questionnaireId);
                 cmd.Parameters.AddWithValue("FLAGFK", flag.id);
 
@@ -71,28 +71,64 @@ namespace FlagAPI.DB {
             Questionnaire questionnaire = new Questionnaire(title);
 
             using (SqlConnection con = new SqlConnection(connectionString))
-            using(SqlCommand cmdQuestionnaire = new SqlCommand(getQuestionnaireIDByTitleQueryString, con))
-            using(SqlCommand cmdQuestionnaireFlag = new SqlCommand(getFlagIDByQuestionnaireIDQueryString, con)) {
+            using (SqlCommand cmdQuestionnaire = new SqlCommand(getQuestionnaireIDByTitleQueryString, con))
+            using (SqlCommand cmdQuestionnaireFlag = new SqlCommand(getFlagIDByQuestionnaireIDQueryString, con)) {
                 con.Open();
                 int questionnaireID = -1;
 
                 cmdQuestionnaire.Parameters.AddWithValue("TITLE", title);
                 SqlDataReader reader = cmdQuestionnaire.ExecuteReader();
 
-                while(reader.Read()) {
+                while (reader.Read()) {
                     questionnaireID = reader.GetInt32(reader.GetOrdinal("id"));
                 }
                 reader.Close();
 
                 cmdQuestionnaireFlag.Parameters.AddWithValue("QUESTIONNAIREFK", questionnaireID);
                 reader = cmdQuestionnaireFlag.ExecuteReader();
-                while(reader.Read() && questionnaireID != -1) {
+                while (reader.Read() && questionnaireID != -1) {
                     int flagID = reader.GetInt32(reader.GetOrdinal("flagID_FK"));
                     questionnaire.addFlag(flagdb.getFlagById(flagID));
                 }
 
                 List<Question> questions = questiondb.getQuestionsByQuestionnaireID(questionnaireID);
-                foreach(Question question in questions) {
+                foreach (Question question in questions) {
+                    questionnaire.addQuestion(question);
+                }
+            }
+            return questionnaire;
+        }
+
+        public Questionnaire getQuestionnaireByQuestionnaireID(int id) {
+            string getQuestionnaireIDByTitleQueryString = "SELECT title FROM Questionnaire WHERE id = @QUESTIONNAIREID";
+            string getFlagIDByQuestionnaireIDQueryString = "SELECT flagID_FK FROM QuestionnaireFlag WHERE questionnaireID_FK = @QUESTIONNAIREFK";
+
+            FlagDAO flagdb = new FlagDB();
+            QuestionDAO questiondb = new QuestionDB();
+            Questionnaire questionnaire = new Questionnaire();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlCommand cmdQuestionnaire = new SqlCommand(getQuestionnaireIDByTitleQueryString, con))
+            using (SqlCommand cmdQuestionnaireFlag = new SqlCommand(getFlagIDByQuestionnaireIDQueryString, con)) {
+                con.Open();
+
+                cmdQuestionnaire.Parameters.AddWithValue("QUESTIONNAIREID", id);
+                SqlDataReader reader = cmdQuestionnaire.ExecuteReader();
+
+                while (reader.Read()) {
+                    questionnaire.title = reader.GetString(reader.GetOrdinal("title"));
+                }
+                reader.Close();
+
+                cmdQuestionnaireFlag.Parameters.AddWithValue("QUESTIONNAIREFK", id);
+                reader = cmdQuestionnaireFlag.ExecuteReader();
+                while (reader.Read()) {
+                    int flagID = reader.GetInt32(reader.GetOrdinal("flagID_FK"));
+                    questionnaire.addFlag(flagdb.getFlagById(flagID));
+                }
+
+                List<Question> questions = questiondb.getQuestionsByQuestionnaireID(id);
+                foreach (Question question in questions) {
                     questionnaire.addQuestion(question);
                 }
             }
