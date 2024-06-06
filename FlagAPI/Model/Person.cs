@@ -7,9 +7,7 @@
         public string phoneNo { get; set; }
         public DateTime dateOfBirth { get; set; }
 
-        public Person() {
-
-        }
+        public Person() {}
         public Person(string firstName, string lastName, string phoneNo, DateTime dateOfBirth, string email, Address address) {
             this.firstName = firstName;
             this.lastName = lastName;

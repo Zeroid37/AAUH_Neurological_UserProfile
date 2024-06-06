@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlagAPI.Model {
+namespace BackEndAAUH.Model {
     public class Questionnaire {
         public string title { get; set; }
         public List<Question> questions;
@@ -46,27 +46,5 @@ namespace FlagAPI.Model {
         public Flag getFlag() {
             return flags[0];
         }
-        //public void setAlertLevel(Flag flag, double currPoints) {
-        //    Dictionary<Flag, int> highestFlagsPoints = getAllFlagsHighestPoints();
-
-        //    double stage1 = highestFlagsPoints[flag] * 0.5;
-        //    double stage2 = highestFlagsPoints[flag] * 0.7;
-        //    double stage3 = highestFlagsPoints[flag] * 0.9;
-
-        //    Console.WriteLine("Curr: " + currPoints);
-        //    Console.WriteLine("S1: " + stage1);
-        //    Console.WriteLine("S2: " + stage2);
-        //    Console.WriteLine("S3: " + stage3);
-
-        //    if (currPoints >= stage1 && currPoints < stage2) { 
-        //        flag.alertLevel = "1";
-        //    } else if(currPoints >= stage2 && currPoints < stage3) {
-        //        flag.alertLevel = "2";
-        //    } else if(currPoints >= stage3) {
-        //        flag.alertLevel = "3";
-        //    } else {
-        //        flag.alertLevel = "0";
-        //    }
-        //}
     }
 }

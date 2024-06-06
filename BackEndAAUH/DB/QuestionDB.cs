@@ -1,4 +1,4 @@
-﻿using FlagAPI.Model;
+﻿using BackEndAAUH.Model;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlagAPI.DB {
+namespace BackEndAAUH.DB {
     public class QuestionDB : QuestionDAO {
         private IConfiguration Configuration;
         private String? connectionString;
@@ -39,13 +39,12 @@ namespace FlagAPI.DB {
         public bool addQuestionToDB(Question question, int questionnaireID, SqlConnection con, SqlTransaction transaction) {
             int insertedRowsNo = 0;
             int questionID = -1;
-            string addQuestionToDBQueryString = "INSERT into Question(questionDescription, flagID_FK, questionnaireID_FK)" +
-                                                "values(@QUESTIONDESC, @FLAGFK, @QUESTIONNAIREFK); SELECT CAST(scope_identity() AS int)";
+            string addQuestionToDBQueryString = "INSERT into Question(questionDescription, questionnaireID_FK)" +
+                                                "values(@QUESTIONDESC, @QUESTIONNAIREFK); SELECT CAST(scope_identity() AS int)";
 
             using (SqlCommand cmd = new SqlCommand(addQuestionToDBQueryString, con, transaction)) {
                 try {
                     cmd.Parameters.AddWithValue("QUESTIONDESC", question.questionDescription);
-                    cmd.Parameters.AddWithValue("FLAGFK", question.flag.id);
                     cmd.Parameters.AddWithValue("QUESTIONNAIREFK", questionnaireID);
 
                     questionID = (int)cmd.ExecuteScalar();
@@ -62,9 +61,8 @@ namespace FlagAPI.DB {
         }
 
         public List<Question> getQuestionsByQuestionnaireID(int questionnaireId) {
-            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription, flagID_FK FROM Question " +
+            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription FROM Question " +
                                                               "WHERE questionnaireID_FK = @QUESTIONNAIREFK";
-            FlagDAO flagdb = new FlagDB();
             List<Question> questions = new List<Question>();
 
             using(SqlConnection con = new SqlConnection(connectionString))
@@ -75,14 +73,11 @@ namespace FlagAPI.DB {
                 while(reader.Read()) {
                     int questionID = reader.GetInt32(reader.GetOrdinal("id"));
                     string questionDescription = reader.GetString(reader.GetOrdinal("questionDescription"));
-                    int flagID = reader.GetInt32(reader.GetOrdinal("flagID_FK"));
-                    Flag flag = flagdb.getFlagById(flagID);
                     List<Answer> answers = getAnswersByQuestionID(questionID);
 
                     Question question = new Question();
                     question.id = questionID.ToString();
                     question.questionDescription = questionDescription;
-                    question.flag = flag;
                     foreach(Answer answer in answers) { 
                         question.addAnswer(answer);
                     }

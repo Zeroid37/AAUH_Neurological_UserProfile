@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using FlagAPI.DB;
-using FlagAPI.Model;
-using FlagAPI.Business;
+using BackEndAAUH.DB;
+using BackEndAAUH.Model;
+using BackEndAAUH.Business;
 
 Console.WriteLine("Hello, World!");
 

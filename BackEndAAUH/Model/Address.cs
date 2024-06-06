@@ -1,4 +1,4 @@
-﻿namespace FlagAPI.Model {
+﻿namespace BackEndAAUH.Model {
     public class Address {
         public string street { get; set; }
         public string houseNo { get; set; }

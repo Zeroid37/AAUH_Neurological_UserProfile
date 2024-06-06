@@ -39,12 +39,11 @@ namespace FlagAPI.DB {
             int insertedRowsNo = 0;
             int questionID = -1;
             string addQuestionToDBQueryString = "INSERT into Question(questionDescription, flagID_FK, questionnaireID_FK)" +
-                                                "values(@QUESTIONDESC, @FLAGFK, @QUESTIONNAIREFK); SELECT CAST(scope_identity() AS int)";
+                                                "values(@QUESTIONDESC, @QUESTIONNAIREFK); SELECT CAST(scope_identity() AS int)";
 
             using (SqlCommand cmd = new SqlCommand(addQuestionToDBQueryString, con, transaction)) {
                 try {
                     cmd.Parameters.AddWithValue("QUESTIONDESC", question.questionDescription);
-                    cmd.Parameters.AddWithValue("FLAGFK", question.flag.id);
                     cmd.Parameters.AddWithValue("QUESTIONNAIREFK", questionnaireID);
 
                     questionID = (int)cmd.ExecuteScalar();
@@ -61,7 +60,7 @@ namespace FlagAPI.DB {
         }
 
         public List<Question> getQuestionsByQuestionnaireID(int questionnaireId) {
-            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription, flagID_FK FROM Question " +
+            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription, FROM Question " +
                                                               "WHERE questionnaireID_FK = @QUESTIONNAIREFK";
             FlagDAO flagdb = new FlagDB();
             List<Question> questions = new List<Question>();
@@ -74,14 +73,11 @@ namespace FlagAPI.DB {
                 while(reader.Read()) {
                     int questionID = reader.GetInt32(reader.GetOrdinal("id"));
                     string questionDescription = reader.GetString(reader.GetOrdinal("questionDescription"));
-                    int flagID = reader.GetInt32(reader.GetOrdinal("flagID_FK"));
-                    Flag flag = flagdb.getFlagById(flagID);
                     List<Answer> answers = getAnswersByQuestionID(questionID);
 
                     Question question = new Question();
                     question.id = questionID.ToString();
                     question.questionDescription = questionDescription;
-                    question.flag = flag;
                     foreach(Answer answer in answers) { 
                         question.addAnswer(answer);
                     }

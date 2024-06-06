@@ -1,7 +1,7 @@
-﻿using FlagAPI.DB;
-using FlagAPI.Model;
+﻿using BackEndAAUH.DB;
+using BackEndAAUH.Model;
 
-namespace FlagAPI.Business {
+namespace BackEndAAUH.Business {
     public class FlagLogic {
         public double stage1 = 0.5;
         public double stage2 = 0.7;
@@ -66,12 +66,12 @@ namespace FlagAPI.Business {
                     double patientPointsPercent = (double)kvp2.Value / (double)maxPoints;
                     string flagID = currQuestionnaire.getFlag().id;
 
-                    //Console.WriteLine($"\tQuestionnaire: {kvp2.Key} - Accumulated points: {kvp2.Value}, Points in percentage: {Math.Round(patientPointsPercent * 100, 2)}%");
+                    Console.WriteLine($"\tQuestionnaire: {kvp2.Key} - Accumulated points: {kvp2.Value}, Points in percentage: {Math.Round(patientPointsPercent * 100, 2)}%");
 
-                    //Console.WriteLine($"maxPoints: {maxPoints}, kvp2.Value: {kvp2.Value}");
-                    //Console.WriteLine($"\nkvp2.Value: {kvp2.Value}");
-                    //Console.WriteLine($"maxPoints: {maxPoints}");
-                    //Console.WriteLine($"flagID: {flagID}\n");
+                    Console.WriteLine($"maxPoints: {maxPoints}, kvp2.Value: {kvp2.Value}");
+                    Console.WriteLine($"\nkvp2.Value: {kvp2.Value}");
+                    Console.WriteLine($"maxPoints: {maxPoints}");
+                    Console.WriteLine($"flagID: {flagID}\n");
 
                     if (patientPointsPercent >= stage1 && patientPointsPercent < stage2) {
                         flagdb.updatePatientFlagLevel(kvp.Key, flagID, 1);

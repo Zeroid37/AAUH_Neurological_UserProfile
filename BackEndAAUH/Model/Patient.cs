@@ -1,7 +1,7 @@
 ﻿
-using FlagAPI.Model;
+using BackEndAAUH.Model;
 
-namespace FlagAPI.Model {
+namespace BackEndAAUH.Model {
     public class Patient : Person {
         public int id {  get; set; }
         public int patientNo { get; set; }

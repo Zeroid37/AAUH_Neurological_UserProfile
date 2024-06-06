@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FlagAPI.Model;
+using BackEndAAUH.Model;
 
-namespace FlagAPI.DB {
+namespace BackEndAAUH.DB {
     public interface QuestionnaireDAO {
         public Questionnaire getQuestionnaireByTitle(string title);
         public bool addQuestionnaireToDB(Questionnaire questionnaire);

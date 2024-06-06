@@ -1,5 +1,4 @@
-﻿
-namespace FlagAPI.Model {
+﻿namespace BackEndAAUH.Model {
     public class ClinicProfessional : Person {
         public string employeeNo { get; set; }
         public string profession {  get; set; }

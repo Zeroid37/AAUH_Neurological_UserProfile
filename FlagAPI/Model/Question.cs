@@ -8,7 +8,6 @@ namespace FlagAPI.Model {
     public class Question {
         public string id { get; set; }
         public string questionDescription { get; set; }
-        public Flag flag { get; set; }
         public List<Answer> answers { get; set; }
 
         public Question() { 
@@ -18,12 +17,10 @@ namespace FlagAPI.Model {
         public Question(string questionDescription, Flag flag) {
             this.answers = new List<Answer>();
             this.questionDescription = questionDescription;
-            this.flag = flag;
         }
 
         public Question(string questionTitle, Flag flag, List<Answer> answers) {
             this.questionDescription = questionTitle;
-            this.flag = flag;
             this.answers = answers;
         }
 
