@@ -333,12 +333,12 @@ string KidneyDiseaseflagid = flagDB.addFlagToDB(KidneyDiseaseFlag).ToString();
 KidneyDiseaseFlag.id = KidneyDiseaseflagid;
 
 QuestionnaireDB qdb = new QuestionnaireDB();
-//qdb.addQuestionnaireToDB(IHD);
-//qdb.addQuestionnaireToDB(Stroke);
-//qdb.addQuestionnaireToDB(COPD);
-//qdb.addQuestionnaireToDB(LungCancer);
-//qdb.addQuestionnaireToDB(Prediabetes);
-//qdb.addQuestionnaireToDB(Kidney);
+qdb.addQuestionnaireToDB(IHD);
+qdb.addQuestionnaireToDB(Stroke);
+qdb.addQuestionnaireToDB(COPD);
+qdb.addQuestionnaireToDB(LungCancer);
+qdb.addQuestionnaireToDB(Prediabetes);
+qdb.addQuestionnaireToDB(Kidney);
 
 
 //Questionnaire qtest = qdb.getQuestionnaireByTitle(COPD.title);
@@ -441,7 +441,7 @@ QuestionnaireDB qdb = new QuestionnaireDB();
 //QuestionDAO qdb = new QuestionDB();
 //qdb.addQuestionsToDB(questions, 1);
 
-DateOnly lastRead = new DateOnly(2024, 1, 1); //TODO Remove dummy date
+//DateOnly lastRead = new DateOnly(2024, 1, 1); //TODO Remove dummy date
 
-FlagLogic fl = new FlagLogic();
-fl.processFlags(lastRead);
+//FlagLogic fl = new FlagLogic();
+//fl.processFlags(lastRead);

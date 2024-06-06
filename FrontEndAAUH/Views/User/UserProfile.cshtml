@@ -68,6 +68,7 @@
                             @Model.questionnaires[qn].questions[q].answers[a].answerText;
 
                             @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].answerValue);
+                            @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].id);
                             @Html.HiddenFor(m => Model.questionnaires[qn].questions[q].answers[a].answerText);
                             <br />
                         }
@@ -78,6 +79,7 @@
                 </div>
             @Html.HiddenFor(m => m.questionnaires[qn].flags)
             }
+
         @Html.HiddenFor(m => Model.firstName);
         @Html.HiddenFor(m => Model.lastName);
         @Html.HiddenFor(m => Model.phoneNo);

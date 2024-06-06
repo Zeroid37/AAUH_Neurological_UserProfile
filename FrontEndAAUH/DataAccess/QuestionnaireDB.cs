@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,9 @@ namespace FrontEndAAUH.DB {
         private IConfiguration Configuration;
         private String? connectionString;
 
-        public QuestionnaireDB() {
-            connectionString = "data Source=127.0.0.1,1433; Database=AAUH; user=sa; password=secret;"; //TODO1 Fix connection string
+        public QuestionnaireDB(IConfiguration configuration) {
+            Configuration = configuration;
+            connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public bool addQuestionnaireToDB(Questionnaire questionnaire) {
@@ -21,7 +23,7 @@ namespace FrontEndAAUH.DB {
             int questionnaireId = -1;
             string addQuestionnaireToDBQueryString = "INSERT into Questionnaire(title) values(@TITLE); SELECT CAST(scope_identity() AS int)";
 
-            QuestionDAO qdb = new QuestionDB();
+            QuestionDAO qdb = new QuestionDB(Configuration);
 
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 con.Open();
@@ -66,8 +68,8 @@ namespace FrontEndAAUH.DB {
             string getQuestionnaireIDByTitleQueryString = "SELECT id FROM Questionnaire WHERE title = @TITLE";
             string getFlagIDByQuestionnaireIDQueryString = "SELECT flagID_FK FROM QuestionnaireFlag WHERE questionnaireID_FK = @QUESTIONNAIREFK";
 
-            FlagDAO flagdb = new FlagDB();
-            QuestionDAO questiondb = new QuestionDB();
+            FlagDAO flagdb = new FlagDB(Configuration);
+            QuestionDAO questiondb = new QuestionDB(Configuration);
             Questionnaire questionnaire = new Questionnaire(title);
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -103,8 +105,8 @@ namespace FrontEndAAUH.DB {
             string getQuestionnaireIDByTitleQueryString = "SELECT title FROM Questionnaire WHERE id = @QUESTIONNAIREID";
             string getFlagIDByQuestionnaireIDQueryString = "SELECT flagID_FK FROM QuestionnaireFlag WHERE questionnaireID_FK = @QUESTIONNAIREFK";
 
-            FlagDAO flagdb = new FlagDB();
-            QuestionDAO questiondb = new QuestionDB();
+            FlagDAO flagdb = new FlagDB(Configuration);
+            QuestionDAO questiondb = new QuestionDB(Configuration);
             Questionnaire questionnaire = new Questionnaire();
 
             using (SqlConnection con = new SqlConnection(connectionString))

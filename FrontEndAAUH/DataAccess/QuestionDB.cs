@@ -13,8 +13,9 @@ namespace FrontEndAAUH.DB {
         private IConfiguration Configuration;
         private String? connectionString;
 
-        public QuestionDB() {
-            connectionString = "data Source=127.0.0.1,1433; Database=AAUH; user=sa; password=secret;";
+        public QuestionDB(IConfiguration configuration) {
+            Configuration = configuration;
+            connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public bool addQuestionsToDB(List<Question> questions, int questionnaireID) {
@@ -89,8 +90,8 @@ namespace FrontEndAAUH.DB {
 
         public bool addAnswerToDB(Answer answer, int questionID) {
             int insertedNoRows = 0;
-            string addAnswerToDBQueryString = "INSERT into Answer(answerText, isChosen, answerValue, questionID_FK)" +
-                                              "values(@ANSWERTEXT, @ISCHOSEN, @ANSWERVALUE, @QUESTIONFK)";
+            string addAnswerToDBQueryString = "INSERT into Answer(answerText, answerValue, questionID_FK)" +
+                                              "values(@ANSWERTEXT, @ANSWERVALUE, @QUESTIONFK)";
 
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(addAnswerToDBQueryString, con)) {
@@ -106,8 +107,8 @@ namespace FrontEndAAUH.DB {
 
         public bool addAnswerToDB(Answer answer, int questionID, SqlConnection con, SqlTransaction transaction) {
             int insertedNoRows = 0;
-            string addAnswerToDBQueryString = "INSERT into Answer(answerText, isChosen, answerValue, questionID_FK)" +
-                                              "values(@ANSWERTEXT, @ISCHOSEN, @ANSWERVALUE, @QUESTIONFK)";
+            string addAnswerToDBQueryString = "INSERT into Answer(answerText, answerValue, questionID_FK)" +
+                                              "values(@ANSWERTEXT, @ANSWERVALUE, @QUESTIONFK)";
 
             using (SqlCommand cmd = new SqlCommand(addAnswerToDBQueryString, con, transaction)) {
                 try {
@@ -124,7 +125,7 @@ namespace FrontEndAAUH.DB {
         }
 
         public List<Answer> getAnswersByQuestionID(int questionID) {
-            string getAnswersByQuestionIDQueryString = "SELECT answerText, isChosen, answerValue FROM " +
+            string getAnswersByQuestionIDQueryString = "SELECT id, answerText, answerValue FROM " +
                                                        "Answer WHERE questionID_FK = @QUESTIONFK";
             List<Answer> answers = new List<Answer>();
 
@@ -134,11 +135,12 @@ namespace FrontEndAAUH.DB {
                 cmd.Parameters.AddWithValue("QUESTIONFK", questionID);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while(reader.Read()) {
+                    int id = reader.GetInt32(reader.GetOrdinal("id"));
                     string answerText = reader.GetString(reader.GetOrdinal("answerText"));
-                    bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
                     int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
 
                     Answer answer = new Answer(answerText, answerValue);
+                    answer.id= id;
                     answers.Add(answer);
                 }
             }
@@ -179,7 +181,7 @@ namespace FrontEndAAUH.DB {
         }
 
         public Answer getAnswerByAnswerID(int answerID) {
-            string getAnswerByAnswerIDQueryString = "SELECT answerText, isChosen, answerValue from Answer where id = @ANSWERID";
+            string getAnswerByAnswerIDQueryString = "SELECT answerText, answerValue from Answer where id = @ANSWERID";
             Answer answer = new Answer();
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -189,7 +191,6 @@ namespace FrontEndAAUH.DB {
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read()) {
                     string answerText = reader.GetString(reader.GetOrdinal("answerText"));
-                    bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
                     int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
 
                     answer.answerText = answerText;

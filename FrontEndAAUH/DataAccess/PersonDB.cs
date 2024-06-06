@@ -107,7 +107,7 @@ namespace FrontEndAAUH.DataAccess {
             Patient patient = new Patient();
             patient.patientNo = Int32.Parse(patientNo);
             List<int> idList = new List<int>();
-            QuestionnaireDAO qnDB = new QuestionnaireDB();
+            QuestionnaireDAO qnDB = new QuestionnaireDB(Configuration);
             
             try {
                 using (SqlConnection con = new SqlConnection(connectionString))
@@ -152,7 +152,8 @@ namespace FrontEndAAUH.DataAccess {
                         patient = null;
                     }
                 }
-            } catch (SqlException) {
+            } catch (SqlException e) {
+                Console.WriteLine(e.StackTrace);
                 throw;
             }
             return patient;

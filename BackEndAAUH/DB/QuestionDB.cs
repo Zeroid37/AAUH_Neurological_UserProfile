@@ -14,7 +14,7 @@ namespace BackEndAAUH.DB {
         private String? connectionString;
 
         public QuestionDB() {
-            connectionString = "data Source=127.0.0.1,1433; Database=AAUH; user=sa; password=secret;";
+            connectionString = "Data Source=192.168.87.133,1433; Database=AAUH; user=sa; password=SecretPassword123;Trusted_Connection=False; Encrypt=false; MultipleActiveResultSets=true";
         }
 
         public bool addQuestionsToDB(List<Question> questions, int questionnaireID) {

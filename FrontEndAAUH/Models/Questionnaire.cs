@@ -20,7 +20,8 @@ namespace FrontEndAAUH.Model {
 
 
         public Questionnaire() { 
-        questions = new List<Question>();
+            questions = new List<Question>();
+            flags = new List<Flag>();
         }
         public bool addQuestion(Question question) {
             bool result = false;

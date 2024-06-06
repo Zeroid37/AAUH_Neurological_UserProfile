@@ -13,7 +13,7 @@ namespace BackEndAAUH.DB {
         private String? connectionString;
 
         public QuestionnaireDB() {
-            connectionString = "data Source=127.0.0.1,1433; Database=AAUH; user=sa; password=secret;"; //TODO1 Fix connection string
+            connectionString = "Data Source=192.168.87.133,1433; Database=AAUH; user=sa; password=SecretPassword123;Trusted_Connection=False; Encrypt=false; MultipleActiveResultSets=true"; //TODO1 Fix connection string
         }
 
         public bool addQuestionnaireToDB(Questionnaire questionnaire) {
