@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BackEndAAUH.Model {
+namespace FlagAPI.Model {
     public class Question {
         public string id { get; set; }
         public string questionDescription { get; set; }

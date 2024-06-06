@@ -1,4 +1,4 @@
-﻿using BackEndAAUH.Model;
+﻿using FlagAPI.Model;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BackEndAAUH.DB {
+namespace FlagAPI.DB {
     public class QuestionnaireDB : QuestionnaireDAO {
         private IConfiguration Configuration;
         private String? connectionString;
@@ -93,42 +93,6 @@ namespace BackEndAAUH.DB {
 
                 List<Question> questions = questiondb.getQuestionsByQuestionnaireID(questionnaireID);
                 foreach(Question question in questions) {
-                    questionnaire.addQuestion(question);
-                }
-            }
-            return questionnaire;
-        }
-
-        public Questionnaire getQuestionnaireByQuestionnaireID(int id) {
-            string getQuestionnaireIDByTitleQueryString = "SELECT title FROM Questionnaire WHERE id = @QUESTIONNAIREID";
-            string getFlagIDByQuestionnaireIDQueryString = "SELECT flagID_FK FROM QuestionnaireFlag WHERE questionnaireID_FK = @QUESTIONNAIREFK";
-
-            FlagDAO flagdb = new FlagDB();
-            QuestionDAO questiondb = new QuestionDB();
-            Questionnaire questionnaire = new Questionnaire();
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmdQuestionnaire = new SqlCommand(getQuestionnaireIDByTitleQueryString, con))
-            using (SqlCommand cmdQuestionnaireFlag = new SqlCommand(getFlagIDByQuestionnaireIDQueryString, con)) {
-                con.Open();
-
-                cmdQuestionnaire.Parameters.AddWithValue("QUESTIONNAIREID", id);
-                SqlDataReader reader = cmdQuestionnaire.ExecuteReader();
-
-                while (reader.Read()) {
-                    questionnaire.title = reader.GetString(reader.GetOrdinal("title"));
-                }
-                reader.Close();
-
-                cmdQuestionnaireFlag.Parameters.AddWithValue("QUESTIONNAIREFK", id);
-                reader = cmdQuestionnaireFlag.ExecuteReader();
-                while (reader.Read()) {
-                    int flagID = reader.GetInt32(reader.GetOrdinal("flagID_FK"));
-                    questionnaire.addFlag(flagdb.getFlagById(flagID));
-                }
-
-                List<Question> questions = questiondb.getQuestionsByQuestionnaireID(id);
-                foreach (Question question in questions) {
                     questionnaire.addQuestion(question);
                 }
             }

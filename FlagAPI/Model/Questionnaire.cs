@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BackEndAAUH.Model {
+namespace FlagAPI.Model {
     public class Questionnaire {
         public string title { get; set; }
         public List<Question> questions;
@@ -22,15 +22,15 @@ namespace BackEndAAUH.Model {
         }
         public bool addQuestion(Question question) {
             bool result = false;
-            if(!questions.Contains(question)) {
+            if (!questions.Contains(question)) {
                 questions.Add(question);
                 result = true;
             }
             return result;
         }
-        public bool addFlag(Flag flag) { 
+        public bool addFlag(Flag flag) {
             bool result = false;
-            if(!flags.Contains(flag)) { 
+            if (!flags.Contains(flag)) {
                 flags.Add(flag);
                 result = true;
             }

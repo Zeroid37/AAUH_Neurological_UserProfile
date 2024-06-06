@@ -1,14 +1,13 @@
-﻿using BackEndAAUH.Model;
+﻿using FlagAPI.Model;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BackEndAAUH.DB {
+namespace FlagAPI.DB {
     public class QuestionDB : QuestionDAO {
         private IConfiguration Configuration;
         private String? connectionString;
@@ -39,7 +38,7 @@ namespace BackEndAAUH.DB {
         public bool addQuestionToDB(Question question, int questionnaireID, SqlConnection con, SqlTransaction transaction) {
             int insertedRowsNo = 0;
             int questionID = -1;
-            string addQuestionToDBQueryString = "INSERT into Question(questionDescription, questionnaireID_FK)" +
+            string addQuestionToDBQueryString = "INSERT into Question(questionDescription, flagID_FK, questionnaireID_FK)" +
                                                 "values(@QUESTIONDESC, @QUESTIONNAIREFK); SELECT CAST(scope_identity() AS int)";
 
             using (SqlCommand cmd = new SqlCommand(addQuestionToDBQueryString, con, transaction)) {
@@ -61,8 +60,9 @@ namespace BackEndAAUH.DB {
         }
 
         public List<Question> getQuestionsByQuestionnaireID(int questionnaireId) {
-            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription FROM Question " +
+            string getQuestionsByQuestionnaireIDQueryString = "SELECT id, questionDescription, FROM Question " +
                                                               "WHERE questionnaireID_FK = @QUESTIONNAIREFK";
+            FlagDAO flagdb = new FlagDB();
             List<Question> questions = new List<Question>();
 
             using(SqlConnection con = new SqlConnection(connectionString))
@@ -145,61 +145,6 @@ namespace BackEndAAUH.DB {
                 }
             }
             return answers;
-        }
-
-        public int getQuestionnaireIDByQuestionID(int questionid) {
-            string getQuestionnaireIDByQuestionIDQueryString = "SELECT questionnaireID_FK FROM Question where id = @QUESTIONID";
-            int result = -1;
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(getQuestionnaireIDByQuestionIDQueryString, con))
-             {
-                con.Open();
-                cmd.Parameters.AddWithValue("QUESTIONID", questionid);
-                SqlDataReader reader = cmd.ExecuteReader();
-                while(reader.Read()) {
-                    result = reader.GetInt32(reader.GetOrdinal("questionnaireID_FK"));
-                }
-            }
-            return result;
-        }
-
-        public int getQuestionIDByAnswerID(int answerID) {
-            string getQuestionIDByAnswerIDQueryString = "SELECT questionID_FK from Answer where id = @ANSWERID";
-            int result = -1;
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(getQuestionIDByAnswerIDQueryString, con)) {
-                con.Open();
-                cmd.Parameters.AddWithValue("ANSWERID", answerID);
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read()) {
-                    result = reader.GetInt32(reader.GetOrdinal("questionID_FK"));
-                }
-            }
-            return result;
-        }
-
-        public Answer getAnswerByAnswerID(int answerID) {
-            string getAnswerByAnswerIDQueryString = "SELECT answerText, isChosen, answerValue from Answer where id = @ANSWERID";
-            Answer answer = new Answer();
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(getAnswerByAnswerIDQueryString, con)) {
-                con.Open();
-                cmd.Parameters.AddWithValue("ANSWERID", answerID);
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read()) {
-                    string answerText = reader.GetString(reader.GetOrdinal("answerText"));
-                    bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
-                    int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
-
-                    answer.answerText = answerText;
-                    answer.isChosen = isChosen;
-                    answer.answerValue = answerValue;
-                }
-                return answer;
-            }
         }
     }
 }
