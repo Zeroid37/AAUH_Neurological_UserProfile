@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FrontEndAAUH.Model {
     public class Flag {
+        public string id {  get; set; }
         public string flagName { get; set; }
         public string flagDescription { get; set; }
         public bool flagRaised { get; set; }
@@ -16,14 +17,14 @@ namespace FrontEndAAUH.Model {
             this.flagName = flagName;
             this.flagDescription = flagDescription;
             this.flagRaised = flagRaised;
-            this.alertLevel = "-1";
+            this.alertLevel = "0";
         }
 
         public Flag(string flagName, string flagDescription) {
             this.flagName = flagName;
             this.flagDescription = flagDescription;
             this.flagRaised = false;
-            this.alertLevel = "-1";
+            this.alertLevel = "0";
         }
     }
 }

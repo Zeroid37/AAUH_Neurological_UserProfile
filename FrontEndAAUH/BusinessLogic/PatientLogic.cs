@@ -7,7 +7,7 @@ namespace FrontEndAAUH.BusinessLogic {
         private IConfiguration Configuration;
 
         public PatientLogic(IConfiguration configuration) {
-            Configuration = configuration;;
+            Configuration = configuration;
         }
 
 

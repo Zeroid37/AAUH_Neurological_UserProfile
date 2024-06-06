@@ -10,13 +10,11 @@ namespace FrontEndAAUH.Model {
         public int id {  get; set; }
         public string answerText { get; set; }
         [BindProperty]
-        public bool isChosen { get; set; }
         public int answerValue { get; set; }
 
         public Answer(string answerText, int answerValue) {
             this.answerText = answerText;
             this.answerValue = answerValue;
-            this.isChosen = false;
         }
 
         public Answer() { }
