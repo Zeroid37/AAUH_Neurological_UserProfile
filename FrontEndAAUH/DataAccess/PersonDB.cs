@@ -1,5 +1,7 @@
-﻿using FrontEndAAUH.Models;
-using Microsoft.Data.SqlClient;
+﻿using FrontEndAAUH.DB;
+using FrontEndAAUH.Model;
+using FrontEndAAUH.Models;
+using System.Data.SqlClient;
 
 namespace FrontEndAAUH.DataAccess {
     public class PersonDB : PersonDAO {
@@ -101,11 +103,16 @@ namespace FrontEndAAUH.DataAccess {
         public Patient getPatientByPatientNo(string patientNo) {
             string getPatientByCPRQuery = "Select email_fk, cpr from Patient where patientNo=@PATIENTNO";
             string getPersonByEmailQuery = "Select firstName, lastName, addressId_FK, phone, dateOfBirth from Person where email=@EMAIL";
+            string getQuestionnaireIdByPatientNoQuery = "select questionnaireID_FK from PatientQuestionnaire where patientNo_FK=@PATIENTNO";
             Patient patient = new Patient();
             patient.patientNo = Int32.Parse(patientNo);
+            List<int> idList = new List<int>();
+            QuestionnaireDAO qnDB = new QuestionnaireDB();
+            
             try {
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (SqlCommand cmdPatient = new SqlCommand(getPatientByCPRQuery, con))
+                using (SqlCommand cmdQuestionnaire = new SqlCommand(getQuestionnaireIdByPatientNoQuery, con))
                 using (SqlCommand cmdPerson = new SqlCommand(getPersonByEmailQuery, con)) {
                     con.Open();
                     cmdPatient.Parameters.AddWithValue("PATIENTNO", patientNo);
@@ -131,8 +138,17 @@ namespace FrontEndAAUH.DataAccess {
                             patient.address = address;
                             patient.dateOfBirth = dateOfBirth;
                         }
-                    } 
-                    else {
+                        cmdQuestionnaire.Parameters.AddWithValue("PATIENTNO", patientNo);
+                        SqlDataReader readerQuestionnaire = cmdQuestionnaire.ExecuteReader();
+                        while (readerQuestionnaire.Read()) {
+                            int qnId = readerQuestionnaire.GetInt32(readerQuestionnaire.GetOrdinal("questionnaireID_FK"));
+                            idList.Add(qnId);
+                        }
+                        foreach (int qnId in idList) {
+                            patient.questionnaires.Add(qnDB.getQuestionnaireByQuestionnaireID(qnId));
+                        }
+
+                    } else {
                         patient = null;
                     }
                 }

@@ -27,7 +27,6 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
     [Authorize(Roles = "Admin,ClinicProfessional,Secretary")]
     public class RegisterModel : PageModel
     {
-        private readonly PatientLogic pLogic;
         private readonly IConfiguration _configuration;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -44,7 +43,6 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
             IEmailSender emailSender,
             IConfiguration iconfiguration)
         {
-            pLogic = new PatientLogic(_configuration);
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -187,15 +185,15 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
 
                     if (Input.CPR != null) {
                         Patient patient = new Patient(person.firstName, person.lastName, person.phoneNo, person.dateOfBirth, 0, person.email, person.address, Input.CPR);
-
+                        PatientLogic pLogic = new PatientLogic(_configuration);
                         pLogic.addPatientToDB(patient);
                     }
                     else if (Input.Profession != null) {
                         //TODO: Create either medical secretary / clinical professional
                     }
                     
-                } catch (Exception) {
-
+                } catch (Exception e) {
+                    Console.WriteLine(e.StackTrace);
                     return Page();
                 }
 

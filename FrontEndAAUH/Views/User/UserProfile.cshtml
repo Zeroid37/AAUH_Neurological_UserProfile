@@ -63,7 +63,7 @@
                     <fieldset>
                         <legend>@Html.DisplayFor(qDesc => Model.questionnaires[qn].questions[q].questionDescription)</legend>
                         @for (int a = 0; a < Model.questionnaires[qn].questions[q].answers.Count; a++) {
-                            <input type="radio" asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex" value="@a" checked="@Model.questionnaires[qn].questions[q].answers[a].isChosen" />
+                            <input type="radio" asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex" value="@a" />
 
                             @Model.questionnaires[qn].questions[q].answers[a].answerText;
 
@@ -73,10 +73,6 @@
                         }
                     </fieldset>
                     @Html.HiddenFor(m => m.questionnaires[qn].questions[q].questionDescription)
-                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.flagDescription)
-                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.flagName)
-                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.flagRaised)
-                    @Html.HiddenFor(m => m.questionnaires[qn].questions[q].flag.alertLevel)
                 }
                     <input type="submit" class="btn btn-primary btn-sm" value="Submit" />
                 </div>

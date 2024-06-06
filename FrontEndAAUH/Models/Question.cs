@@ -6,29 +6,37 @@ using System.Threading.Tasks;
 
 namespace FrontEndAAUH.Model {
     public class Question {
-        public int id { get; set; }
+        public string id { get; set; }
         public string questionDescription { get; set; }
-        public Flag flag { get; set; }
         public List<Answer> answers { get; set; }
         public string chosenAnswerIndex { get; set; }
-        public Question() { 
+
+        public Question() {
             this.answers = new List<Answer>();
         }
 
-        public Question(string questionTitle, Flag flag, List<Answer> answers) {
+        public Question(string questionDescription, Flag flag) {
             this.answers = new List<Answer>();
+            this.questionDescription = questionDescription;
+        }
+
+        public Question(string questionTitle, Flag flag, List<Answer> answers) {
             this.questionDescription = questionTitle;
-            this.flag = flag;
             this.answers = answers;
         }
+
         public int findHighestPoints() {
             int highest = 0;
-            foreach(Answer answer in answers) {
-                if(answer.answerValue>highest) {
+            foreach (Answer answer in answers) {
+                if (answer.answerValue > highest) {
                     highest = answer.answerValue;
                 }
             }
             return highest;
+        }
+
+        public void addAnswer(Answer answer) {
+            answers.Add(answer);
         }
     }
 }
