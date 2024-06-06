@@ -9,5 +9,6 @@ namespace FlagAPI.DB {
     public interface QuestionnaireDAO {
         public Questionnaire getQuestionnaireByTitle(string title);
         public bool addQuestionnaireToDB(Questionnaire questionnaire);
+        public Questionnaire getQuestionnaireByQuestionnaireID(int id);
     }
 }

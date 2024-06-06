@@ -9,8 +9,9 @@ namespace FlagAPI.Model {
         public string id { get; set; }
         public string questionDescription { get; set; }
         public List<Answer> answers { get; set; }
+        public string chosenAnswerIndex { get; set; }
 
-        public Question() { 
+        public Question() {
             this.answers = new List<Answer>();
         }
 
@@ -26,8 +27,8 @@ namespace FlagAPI.Model {
 
         public int findHighestPoints() {
             int highest = 0;
-            foreach(Answer answer in answers) {
-                if(answer.answerValue>highest) {
+            foreach (Answer answer in answers) {
+                if (answer.answerValue > highest) {
                     highest = answer.answerValue;
                 }
             }

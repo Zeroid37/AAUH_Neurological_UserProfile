@@ -9,6 +9,7 @@ namespace BackEndAAUH.Model {
         public string id { get; set; }
         public string questionDescription { get; set; }
         public List<Answer> answers { get; set; }
+        public string chosenAnswerIndex { get; set; }
 
         public Question() { 
             this.answers = new List<Answer>();

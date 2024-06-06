@@ -10,6 +10,7 @@ namespace FlagAPI.Model {
         public string title { get; set; }
         public List<Question> questions;
         public List<Flag> flags;
+        public bool isChosen { get; set; }
 
         public Questionnaire() {
             questions = new List<Question>();

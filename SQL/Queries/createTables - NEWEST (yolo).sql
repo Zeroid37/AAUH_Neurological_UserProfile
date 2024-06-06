@@ -22,15 +22,14 @@ create table Person(
 	addressId_FK int not null foreign key references Address(id),
 	phone varchar(16) not null unique,	
 	dateOfBirth dateTime not null,
-	email varchar(30) not null unique,
-	password varchar(20) not null,
-	adminLevel int not null
+	email varchar(30) not null unique
 )
 
 --Patient
 create table Patient(
 	patientNo int IDENTITY(381943, 1) primary key,
-	email_FK varchar(30) not null unique foreign key references Person(email)
+	email_FK varchar(30) not null unique foreign key references Person(email),
+	cpr varchar(10) not null
 )
 
 --Medical Secretary
@@ -73,7 +72,6 @@ create table Question(
 create table Answer(
 	id int IDENTITY(1, 1) primary key,
 	answerText varchar(100) not null,
-	isChosen bit not null,
 	answerValue int not null,
 	questionID_FK int not null foreign key references Question(id)
 )
@@ -101,4 +99,11 @@ create table PatientFlag(
 	flagID_FK int not null foreign key references Flag(id),
 	flagStage int not null,
 	PRIMARY KEY(patientNo_FK, flagID_FK)
+)
+
+--PatientQuestionnaire
+create table PatientQuestionnaire(
+    patientNo_FK int not null foreign key references Patient(patientNo),
+    questionnaireID_FK int not null foreign key references Questionnaire(id),
+    PRIMARY KEY(patientNo_FK, questionnaireID_FK)
 )

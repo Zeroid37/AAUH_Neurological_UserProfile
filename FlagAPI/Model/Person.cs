@@ -1,6 +1,6 @@
 ﻿namespace FlagAPI.Model {
     public class Person {
-        public string firstName {  get; set; }
+        public string firstName { get; set; }
         public string lastName { get; set; }
         public string email { get; set; }
         public Address address { get; set; }

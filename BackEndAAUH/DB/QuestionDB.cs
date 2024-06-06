@@ -90,13 +90,12 @@ namespace BackEndAAUH.DB {
         public bool addAnswerToDB(Answer answer, int questionID) {
             int insertedNoRows = 0;
             string addAnswerToDBQueryString = "INSERT into Answer(answerText, isChosen, answerValue, questionID_FK)" +
-                                              "values(@ANSWERTEXT, @ISCHOSEN, @ANSWERVALUE, @QUESTIONFK)";
+                                              "values(@ANSWERTEXT, @ANSWERVALUE, @QUESTIONFK)";
 
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(addAnswerToDBQueryString, con)) {
                 con.Open();
                 cmd.Parameters.AddWithValue("ANSWERTEXT", answer.answerText);
-                cmd.Parameters.AddWithValue("ISCHOSEN", answer.isChosen);
                 cmd.Parameters.AddWithValue("ANSWERVALUE", answer.answerValue);
                 cmd.Parameters.AddWithValue("QUESTIONFK", questionID);
 
@@ -108,12 +107,11 @@ namespace BackEndAAUH.DB {
         public bool addAnswerToDB(Answer answer, int questionID, SqlConnection con, SqlTransaction transaction) {
             int insertedNoRows = 0;
             string addAnswerToDBQueryString = "INSERT into Answer(answerText, isChosen, answerValue, questionID_FK)" +
-                                              "values(@ANSWERTEXT, @ISCHOSEN, @ANSWERVALUE, @QUESTIONFK)";
+                                              "values(@ANSWERTEXT, @ANSWERVALUE, @QUESTIONFK)";
 
             using (SqlCommand cmd = new SqlCommand(addAnswerToDBQueryString, con, transaction)) {
                 try {
                     cmd.Parameters.AddWithValue("ANSWERTEXT", answer.answerText);
-                    cmd.Parameters.AddWithValue("ISCHOSEN", answer.isChosen);
                     cmd.Parameters.AddWithValue("ANSWERVALUE", answer.answerValue);
                     cmd.Parameters.AddWithValue("QUESTIONFK", questionID);
 
@@ -126,7 +124,7 @@ namespace BackEndAAUH.DB {
         }
 
         public List<Answer> getAnswersByQuestionID(int questionID) {
-            string getAnswersByQuestionIDQueryString = "SELECT answerText, isChosen, answerValue FROM " +
+            string getAnswersByQuestionIDQueryString = "SELECT answerText, answerValue FROM " +
                                                        "Answer WHERE questionID_FK = @QUESTIONFK";
             List<Answer> answers = new List<Answer>();
 
@@ -137,10 +135,9 @@ namespace BackEndAAUH.DB {
                 SqlDataReader reader = cmd.ExecuteReader();
                 while(reader.Read()) {
                     string answerText = reader.GetString(reader.GetOrdinal("answerText"));
-                    bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
                     int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
 
-                    Answer answer = new Answer(answerText, answerValue, isChosen);
+                    Answer answer = new Answer(answerText, answerValue);
                     answers.Add(answer);
                 }
             }
@@ -181,7 +178,7 @@ namespace BackEndAAUH.DB {
         }
 
         public Answer getAnswerByAnswerID(int answerID) {
-            string getAnswerByAnswerIDQueryString = "SELECT answerText, isChosen, answerValue from Answer where id = @ANSWERID";
+            string getAnswerByAnswerIDQueryString = "SELECT answerText, answerValue from Answer where id = @ANSWERID";
             Answer answer = new Answer();
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -191,11 +188,9 @@ namespace BackEndAAUH.DB {
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read()) {
                     string answerText = reader.GetString(reader.GetOrdinal("answerText"));
-                    bool isChosen = reader.GetBoolean(reader.GetOrdinal("isChosen"));
                     int answerValue = reader.GetInt32(reader.GetOrdinal("answerValue"));
 
                     answer.answerText = answerText;
-                    answer.isChosen = isChosen;
                     answer.answerValue = answerValue;
                 }
                 return answer;
