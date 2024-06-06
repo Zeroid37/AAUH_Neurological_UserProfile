@@ -12,8 +12,9 @@ namespace FlagAPI.DB {
         private IConfiguration Configuration;
         private String? connectionString;
 
-        public FlagDB() {
-            connectionString = "data Source=127.0.0.1,1433; Database=AAUH; user=sa; password=secret;";
+        public FlagDB(IConfiguration configuration) {
+            Configuration = configuration;
+            connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public int addFlagToDB(Flag flag) {

@@ -3,11 +3,14 @@ using FlagAPI.Model;
 
 namespace FlagAPI.Business {
     public class FlagLogic {
+        private IConfiguration Configuration;
         public double stage1 = 0.5;
         public double stage2 = 0.7;
         public double stage3 = 0.9;
 
-        public FlagLogic() { }
+        public FlagLogic(IConfiguration configuration) {
+            Configuration = configuration;
+        }
 
         public void processFlags(DateOnly lastRead) {
             Dictionary<int, Dictionary<int, int>> pointSums = new Dictionary<int, Dictionary<int, int>>();
@@ -25,14 +28,14 @@ namespace FlagAPI.Business {
         }
 
         public List<PatientAnswer> getNewAnswers(DateOnly lastRead) {
-            FlagDAO flagdb = new FlagDB();
+            FlagDAO flagdb = new FlagDB(Configuration);
             List<PatientAnswer> newAnswers = flagdb.getNewPatientAnswers(lastRead);
             return newAnswers;
         }
 
         private Dictionary<int, Dictionary<int, int>> calculatePointSums(List<PatientAnswer> newAnswers, Dictionary<int, Dictionary<int, int>> pointSums) {
-            QuestionnaireDAO questionnairedb = new QuestionnaireDB();
-            QuestionDAO questiondb = new QuestionDB();
+            QuestionnaireDAO questionnairedb = new QuestionnaireDB(Configuration);
+            QuestionDAO questiondb = new QuestionDB(Configuration);
 
             foreach (PatientAnswer patientAnswer in newAnswers) {
                 Answer answer = questiondb.getAnswerByAnswerID(patientAnswer.answerID);
@@ -55,8 +58,8 @@ namespace FlagAPI.Business {
         }
 
         private void updateUserFlags(Dictionary<int, Dictionary<int, int>> pointSums) {
-            QuestionnaireDAO questionnairedb = new QuestionnaireDB();
-            FlagDAO flagdb = new FlagDB();
+            QuestionnaireDAO questionnairedb = new QuestionnaireDB(Configuration);
+            FlagDAO flagdb = new FlagDB(Configuration);
             Questionnaire currQuestionnaire = new Questionnaire();
 
             foreach (KeyValuePair<int, Dictionary<int, int>> kvp in pointSums) {
@@ -91,7 +94,7 @@ namespace FlagAPI.Business {
         }
 
         private void updateAnswersRead(List<PatientAnswer> patientAnswers) {
-            FlagDAO flagdb = new FlagDB();
+            FlagDAO flagdb = new FlagDB(Configuration);
             DateOnly dateNow = DateOnly.FromDateTime(DateTime.Now);
             foreach (PatientAnswer answer in patientAnswers) {
                 flagdb.updatePatientAnswerTime(answer, dateNow);

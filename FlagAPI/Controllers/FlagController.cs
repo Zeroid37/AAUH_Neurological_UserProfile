@@ -5,7 +5,9 @@ namespace FlagAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class FlagController : Controller {
-        public FlagController() {
+        private readonly IConfiguration _configuration;
+        public FlagController(IConfiguration configuration) {
+            _configuration = configuration;
         }
 
         [HttpPost]

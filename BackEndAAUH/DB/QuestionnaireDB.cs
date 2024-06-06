@@ -12,8 +12,9 @@ namespace BackEndAAUH.DB {
         private IConfiguration Configuration;
         private String? connectionString;
 
-        public QuestionnaireDB() {
-            connectionString = "Data Source=192.168.87.133,1433; Database=AAUH; user=sa; password=SecretPassword123;Trusted_Connection=False; Encrypt=false; MultipleActiveResultSets=true"; //TODO1 Fix connection string
+        public QuestionnaireDB(IConfiguration configuration) {
+            Configuration = configuration;
+            connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public bool addQuestionnaireToDB(Questionnaire questionnaire) {
