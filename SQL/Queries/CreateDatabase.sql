@@ -22,15 +22,14 @@ create table Person(
 	addressId_FK int not null foreign key references Address(id),
 	phone varchar(16) not null unique,	
 	dateOfBirth dateTime not null,
-	email varchar(30) not null unique,
-	password varchar(20) not null,
-	adminLevel int not null
+	email varchar(30) not null unique
 )
 
 --Patient
 create table Patient(
 	patientNo int IDENTITY(381943, 1) primary key,
-	email_FK varchar(30) not null unique foreign key references Person(email)
+	email_FK varchar(30) not null unique foreign key references Person(email),
+	cpr varchar(10) not null
 )
 
 --Medical Secretary
@@ -45,21 +44,6 @@ create table ClinicProfessional(
 	employeeNo int IDENTITY(381943, 1) primary key,
 	profession varchar(20),
 	email_FK varchar(30) not null unique foreign key references Person(email)
-)
-
---User Profile
-create table UserProfile(
-	id int IDENTITY(1, 1) primary key,
-	--picture
-	patientNo int not null foreign key references Patient(patientNo)
-)
-
---Test
-create table Test(
-	id int IDENTITY(1, 1) primary key,
-	testType varchar (50) not null,
-	result varchar(500) not null,
-	userProfileID_FK int not null foreign key references UserProfile(id)
 )
 
 --Flag
@@ -81,7 +65,6 @@ create table Questionnaire(
 create table Question(
 	id int IDENTITY(1,1) primary key,
 	questionDescription varchar(200) not null,
-	flagID_FK int not null foreign key references Flag(id),
 	questionnaireID_FK int not null foreign key references Questionnaire(id)
 )
 
@@ -96,41 +79,6 @@ create table Answer(
 
 --Join Tables
 
---ClinicProfessionalQuestionnaire
-create table ClinicProfessionalQuestionnaire(
-	employeeNo_FK int not null foreign key references ClinicProfessional(employeeNo),
-	questionnaireID_FK int not null foreign key references Questionnaire(id)
-	PRIMARY KEY(employeeNo_FK, questionnaireID_FK)
-)
-
---UserProfileQuestionnaire
-create table UserProfileQuestionnaire(
-	userProfileID_FK int not null foreign key references UserProfile(id),
-	questionnaireID_FK int not null foreign key references Questionnaire(id),
-	PRIMARY KEY(userProfileID_FK, questionnaireID_FK)
-)
-
---QuestionnaireQuestion
-create table QuestionnaireQuestion(
-	questionID_FK int not null foreign key references Question(id),
-	questionnaireID_FK int not null foreign key references Questionnaire(id),
-	PRIMARY KEY(questionID_FK, questionnaireID_FK)
-)
-
---QuestionFlags
-create table QuestionFlags(
-	questionID_FK int not null foreign key references Question(id),
-	flagID_FK int not null foreign key references Flag(id),
-	PRIMARY KEY(questionID_FK, flagID_FK)
-)
-
---UseProfileFlags
-create table UseProfileFlags(
-	userProfileID_FK int not null foreign key references UserProfile(id),
-	flagID_FK int not null foreign key references Flag(id),
-	PRIMARY KEY(userProfileID_FK, flagID_FK)
-)
-
 --QuestionnaireFlag
 create table QuestionnaireFlag(
 	questionnaireID_FK int not null foreign key references Questionnaire(id),
@@ -142,12 +90,21 @@ create table QuestionnaireFlag(
 create table PatientAnswer(
 	patientNo_FK int not null foreign key references Patient(patientNo),
 	answerID_FK int not null foreign key references Answer(id),
-	answerUpdated DATE not null
+	answerUpdated DATE not null,
+	PRIMARY KEY(patientNo_FK, answerID_FK)
 )
 
 --PatientFlag
 create table PatientFlag(
 	patientNo_FK int not null foreign key references Patient(patientNo),
 	flagID_FK int not null foreign key references Flag(id),
-	flagStage int not null
+	flagStage int not null,
+	PRIMARY KEY(patientNo_FK, flagID_FK)
+)
+
+--PatientQuestionnaire
+create table PatientQuestionnaire(
+    patientNo_FK int not null foreign key references Patient(patientNo),
+    questionnaireID_FK int not null foreign key references Questionnaire(id),
+    PRIMARY KEY(patientNo_FK, questionnaireID_FK)
 )
