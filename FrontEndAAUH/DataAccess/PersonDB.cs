@@ -83,7 +83,6 @@ namespace FrontEndAAUH.DataAccess {
                         insertedRows = cmd.ExecuteNonQuery();
                         transaction.Commit();
                     } catch (SqlException e) {
-                        Console.WriteLine(e);
                         transaction.Rollback();
                     }
                 }
@@ -152,7 +151,6 @@ namespace FrontEndAAUH.DataAccess {
                     }
                 }
             } catch (SqlException e) {
-                Console.WriteLine(e.StackTrace);
                 throw;
             }
             return patient;

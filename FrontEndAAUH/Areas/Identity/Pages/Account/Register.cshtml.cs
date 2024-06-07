@@ -193,7 +193,6 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
                     }
                     
                 } catch (Exception e) {
-                    Console.WriteLine(e.StackTrace);
                     return Page();
                 }
 

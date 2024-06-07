@@ -26,10 +26,8 @@ namespace FrontEndAAUH.Controllers {
                     connectStringOk = (conn.State == ConnectionState.Open);
                 }
             } catch (Exception ex){
-                Console.WriteLine(ex);
                 connectStringOk = false;
             }
-            Console.WriteLine(connectStringOk);
             return View();
         }
 
