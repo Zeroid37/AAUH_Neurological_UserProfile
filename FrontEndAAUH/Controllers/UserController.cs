@@ -128,21 +128,21 @@ namespace FrontEndAAUH.Controllers {
         
         public ActionResult editCurrentQuestionnaire([FromForm] QuestionnaireModel qnm) {
 
-            //TODO: Fjern questionnaire fra DB logik
+            //TODO Implementer metode
 
             return RedirectToAction("EditUserQuestionnaire", new {id = qnm.patient.patientNo});
         }
 
         public ActionResult addQuestionnaire([FromForm] QuestionnaireModel qnm) {
 
-            //TODO: Fjern questionnaire fra DB logik
+            //TODO Implementer metode
 
             return RedirectToAction("EditUserQuestionnaire", new { id = qnm.patient.patientNo });
         }
 
         public ActionResult addCutomQuestion([FromForm] QuestionnaireModel qnm) {
 
-            //TODO: Fjern questionnaire fra DB logik
+            //TODO Implementer metode
 
             return RedirectToAction("EditUserQuestionnaire", new { id = qnm.patient.patientNo });
         }

@@ -313,32 +313,32 @@ Kidney.addQuestion(Kidneyq4);
 Kidney.addQuestion(Kidneyq5);
 
 
-FlagDB flagDB = new FlagDB();
-string IDHflagid = flagDB.addFlagToDB(IHDFlag).ToString();
-IHDFlag.id = IDHflagid;
+//FlagDB flagDB = new FlagDB();
+//string IDHflagid = flagDB.addFlagToDB(IHDFlag).ToString();
+//IHDFlag.id = IDHflagid;
 
-string Strokeflagid = flagDB.addFlagToDB(StrokeFlag).ToString();
-StrokeFlag.id = Strokeflagid;
+//string Strokeflagid = flagDB.addFlagToDB(StrokeFlag).ToString();
+//StrokeFlag.id = Strokeflagid;
 
-string COPDflagid = flagDB.addFlagToDB(COPDFlag).ToString();
-COPDFlag.id = COPDflagid;
+//string COPDflagid = flagDB.addFlagToDB(COPDFlag).ToString();
+//COPDFlag.id = COPDflagid;
 
-string LungCancerflagid = flagDB.addFlagToDB(LungCancerFlag).ToString();
-LungCancerFlag.id = LungCancerflagid;
+//string LungCancerflagid = flagDB.addFlagToDB(LungCancerFlag).ToString();
+//LungCancerFlag.id = LungCancerflagid;
 
-string Prediabetesflagid = flagDB.addFlagToDB(PrediabetesFlag).ToString();
-PrediabetesFlag.id = Prediabetesflagid;
+//string Prediabetesflagid = flagDB.addFlagToDB(PrediabetesFlag).ToString();
+//PrediabetesFlag.id = Prediabetesflagid;
 
-string KidneyDiseaseflagid = flagDB.addFlagToDB(KidneyDiseaseFlag).ToString();
-KidneyDiseaseFlag.id = KidneyDiseaseflagid;
+//string KidneyDiseaseflagid = flagDB.addFlagToDB(KidneyDiseaseFlag).ToString();
+//KidneyDiseaseFlag.id = KidneyDiseaseflagid;
 
-QuestionnaireDB qdb = new QuestionnaireDB();
-qdb.addQuestionnaireToDB(IHD);
-qdb.addQuestionnaireToDB(Stroke);
-qdb.addQuestionnaireToDB(COPD);
-qdb.addQuestionnaireToDB(LungCancer);
-qdb.addQuestionnaireToDB(Prediabetes);
-qdb.addQuestionnaireToDB(Kidney);
+//QuestionnaireDB qdb = new QuestionnaireDB();
+//qdb.addQuestionnaireToDB(IHD);
+//qdb.addQuestionnaireToDB(Stroke);
+//qdb.addQuestionnaireToDB(COPD);
+//qdb.addQuestionnaireToDB(LungCancer);
+//qdb.addQuestionnaireToDB(Prediabetes);
+//qdb.addQuestionnaireToDB(Kidney);
 
 
 //Questionnaire qtest = qdb.getQuestionnaireByTitle(COPD.title);

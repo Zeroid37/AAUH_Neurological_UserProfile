@@ -12,9 +12,9 @@ namespace FlagAPI.Controllers {
 
         [HttpPost]
         public async Task Process() {
-            DateOnly lastRead = new DateOnly(2000, 1, 1); //TODO Remove dummy date
+            DateOnly lastRead = new DateOnly(2000, 1, 1); //TODO dummy date, needed for example
 
-            FlagLogic fl = new FlagLogic();
+            FlagLogic fl = new FlagLogic(_configuration);
             fl.processFlags(lastRead);
         }
     }

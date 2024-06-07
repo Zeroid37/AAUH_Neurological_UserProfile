@@ -22,11 +22,11 @@ namespace FlagAPI.DB {
             int questionnaireId = -1;
             string addQuestionnaireToDBQueryString = "INSERT into Questionnaire(title) values(@TITLE); SELECT CAST(scope_identity() AS int)";
 
-            QuestionDAO qdb = new QuestionDB();
+            QuestionDAO qdb = new QuestionDB(Configuration);
 
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 con.Open();
-                SqlTransaction transaction = con.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted, "addQuestionnaireTransaction"); //TODO1 ReadUncommited?
+                SqlTransaction transaction = con.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted, "addQuestionnaireTransaction");
                 using (SqlCommand cmd = new SqlCommand(addQuestionnaireToDBQueryString, con, transaction)) {
                     try {
                         cmd.Parameters.AddWithValue("TITLE", questionnaire.title);
@@ -67,8 +67,8 @@ namespace FlagAPI.DB {
             string getQuestionnaireIDByTitleQueryString = "SELECT id FROM Questionnaire WHERE title = @TITLE";
             string getFlagIDByQuestionnaireIDQueryString = "SELECT flagID_FK FROM QuestionnaireFlag WHERE questionnaireID_FK = @QUESTIONNAIREFK";
 
-            FlagDAO flagdb = new FlagDB();
-            QuestionDAO questiondb = new QuestionDB();
+            FlagDAO flagdb = new FlagDB(Configuration);
+            QuestionDAO questiondb = new QuestionDB(Configuration);
             Questionnaire questionnaire = new Questionnaire(title);
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -104,8 +104,8 @@ namespace FlagAPI.DB {
             string getQuestionnaireIDByTitleQueryString = "SELECT title FROM Questionnaire WHERE id = @QUESTIONNAIREID";
             string getFlagIDByQuestionnaireIDQueryString = "SELECT flagID_FK FROM QuestionnaireFlag WHERE questionnaireID_FK = @QUESTIONNAIREFK";
 
-            FlagDAO flagdb = new FlagDB();
-            QuestionDAO questiondb = new QuestionDB();
+            FlagDAO flagdb = new FlagDB(Configuration);
+            QuestionDAO questiondb = new QuestionDB(Configuration);
             Questionnaire questionnaire = new Questionnaire();
 
             using (SqlConnection con = new SqlConnection(connectionString))

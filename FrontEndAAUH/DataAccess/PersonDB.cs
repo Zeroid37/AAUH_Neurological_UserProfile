@@ -98,8 +98,7 @@ namespace FrontEndAAUH.DataAccess {
         public bool addMedicalSecretaryToDB(MedicalSecretary medicalSecretary) {
             throw new NotImplementedException();
         }
-
-        //TODO: Fix at lortet crasher hvis du indtaster ugyldigt patientNo  
+  
         public Patient getPatientByPatientNo(string patientNo) {
             string getPatientByCPRQuery = "Select email_fk, cpr from Patient where patientNo=@PATIENTNO";
             string getPersonByEmailQuery = "Select firstName, lastName, addressId_FK, phone, dateOfBirth from Person where email=@EMAIL";
