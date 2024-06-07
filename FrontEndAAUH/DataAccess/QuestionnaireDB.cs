@@ -27,7 +27,7 @@ namespace FrontEndAAUH.DB {
 
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 con.Open();
-                SqlTransaction transaction = con.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted, "addQuestionnaireTransaction"); //TODO1 ReadUncommited?
+                SqlTransaction transaction = con.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted, "addQuestionnaireTransaction");
                 using (SqlCommand cmd = new SqlCommand(addQuestionnaireToDBQueryString, con, transaction)) {
                     try {
                         cmd.Parameters.AddWithValue("TITLE", questionnaire.title);

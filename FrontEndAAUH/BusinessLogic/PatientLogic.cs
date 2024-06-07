@@ -26,7 +26,7 @@ namespace FrontEndAAUH.BusinessLogic {
             bool res = false;
 
 
-            //TODO: Logic to update
+            //TODO Implementer metode
 
             return res;
 

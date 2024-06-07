@@ -22,7 +22,7 @@ namespace BackEndAAUH.DB {
             bool res = false;
             using (SqlConnection con = new SqlConnection(connectionString)) {
                 con.Open();
-                SqlTransaction transaction = con.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted, "addQuestionsTransaction"); //TODO1 ReadUncommited?
+                SqlTransaction transaction = con.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted, "addQuestionsTransaction");
                 try {
                     foreach (Question question in questions) {
                         addQuestionToDB(question, questionnaireID, con, transaction);

@@ -12,9 +12,9 @@
     var usr = await UserManager.GetUserAsync(User);
     var email = usr?.Email;
 }
-<!--TODO: Fjern '!' så man faktisk skal være logget ind-->
-@if (!SignInManager.IsSignedIn(User)) {
-    @if (!User.IsInRole("Admin") || User.IsInRole("ClinicProfessional")) {
+
+@if (SignInManager.IsSignedIn(User)) {
+    @if (User.IsInRole("Admin") || User.IsInRole("ClinicProfessional")) {
         <div class="patient">
             <div class="info">
                 <label class="infoLabels">Fulde navn: @Model.patient.firstName @Model.patient.lastName </label>

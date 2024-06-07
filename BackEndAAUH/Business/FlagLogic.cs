@@ -20,12 +20,6 @@ namespace BackEndAAUH.Business {
             pointSums = calculatePointSums(newAnswers, pointSums);
             updateUserFlags(pointSums);
             updateAnswersRead(newAnswers);
-            //foreach (KeyValuePair<int, Dictionary<int, int>> kvp in pointSums) {
-            //    Console.WriteLine($"Patient: {kvp.Key}");
-            //    foreach (KeyValuePair<int, int> kvp2 in kvp.Value) {
-            //        Console.WriteLine($"\tQuestionnaire: {kvp2.Key}, value: {kvp2.Value}");
-            //    }
-            //}
         }
 
         public List<PatientAnswer> getNewAnswers(DateOnly lastRead) {
@@ -63,19 +57,11 @@ namespace BackEndAAUH.Business {
             Questionnaire currQuestionnaire = new Questionnaire();
 
             foreach(KeyValuePair<int, Dictionary<int, int>> kvp in  pointSums) {
-                //Console.WriteLine($"Patient: {kvp.Key}");
                 foreach (KeyValuePair<int, int> kvp2 in kvp.Value) {
                     currQuestionnaire = questionnairedb.getQuestionnaireByQuestionnaireID(kvp2.Key);
                     int maxPoints = currQuestionnaire.getMaximumPoints();
                     double patientPointsPercent = (double)kvp2.Value / (double)maxPoints;
                     string flagID = currQuestionnaire.getFlag().id;
-
-                    Console.WriteLine($"\tQuestionnaire: {kvp2.Key} - Accumulated points: {kvp2.Value}, Points in percentage: {Math.Round(patientPointsPercent * 100, 2)}%");
-
-                    Console.WriteLine($"maxPoints: {maxPoints}, kvp2.Value: {kvp2.Value}");
-                    Console.WriteLine($"\nkvp2.Value: {kvp2.Value}");
-                    Console.WriteLine($"maxPoints: {maxPoints}");
-                    Console.WriteLine($"flagID: {flagID}\n");
 
                     if (patientPointsPercent >= stage1 && patientPointsPercent < stage2) {
                         flagdb.updatePatientFlagLevel(kvp.Key, flagID, 1);

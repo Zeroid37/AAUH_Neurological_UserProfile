@@ -22,9 +22,9 @@
     }
 }
 
-<!--TODO: Fjern '!' så man faktisk skal være logget ind-->
-@if (!SignInManager.IsSignedIn(User)) {
-    @if (!User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("ClinicProfessional") || Model.email.Equals(email)) {
+
+@if (SignInManager.IsSignedIn(User)) {
+    @if (User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("ClinicProfessional") || Model.email.Equals(email)) {
         <div class="patient">
             <div class="info">
                 <label class="infoLabels">Fulde navn: @Model.firstName @Model.lastName </label>
@@ -37,7 +37,7 @@
             <div class="profilBillede">
                 <img src="~/css/placeholder_man.jpg" />
             </div>
-            @if (!User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("ClinicProfessional")) {
+            @if (User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("ClinicProfessional")) {
                 <div class="flags">
                     <p>FLAGS</p>
                 </div>
