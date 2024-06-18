@@ -16,6 +16,9 @@ namespace BackEndAAUH.DB {
             Configuration = configuration;
             connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
+        public QuestionnaireDB() {
+            connectionString = "Data Source=172.22.96.1,1433; Database=AAUH; user=sa; password=SecretPassword123;Trusted_Connection=False; Encrypt=false; MultipleActiveResultSets=true";
+        }
 
         public bool addQuestionnaireToDB(Questionnaire questionnaire) {
             int insertedRowsNo = 0;
@@ -41,7 +44,7 @@ namespace BackEndAAUH.DB {
 
                         transaction.Commit();
                         insertedRowsNo = 1;
-                    } catch (SqlException) {
+                    } catch (SqlException e) {
                         transaction.Rollback();
                     }
                 }

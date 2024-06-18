@@ -72,7 +72,6 @@ create table Question(
 create table Answer(
 	id int IDENTITY(1, 1) primary key,
 	answerText varchar(100) not null,
-	isChosen bit not null,
 	answerValue int not null,
 	questionID_FK int not null foreign key references Question(id)
 )

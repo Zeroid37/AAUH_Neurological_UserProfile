@@ -17,6 +17,9 @@ namespace BackEndAAUH.DB {
             Configuration = configuration;
             connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
+        public QuestionDB() {
+            connectionString = "Data Source=172.22.96.1,1433; Database=AAUH; user=sa; password=SecretPassword123;Trusted_Connection=False; Encrypt=false; MultipleActiveResultSets=true";
+        }
 
         public bool addQuestionsToDB(List<Question> questions, int questionnaireID) {
             bool res = false;
@@ -107,7 +110,7 @@ namespace BackEndAAUH.DB {
 
         public bool addAnswerToDB(Answer answer, int questionID, SqlConnection con, SqlTransaction transaction) {
             int insertedNoRows = 0;
-            string addAnswerToDBQueryString = "INSERT into Answer(answerText, isChosen, answerValue, questionID_FK)" +
+            string addAnswerToDBQueryString = "INSERT into Answer(answerText, answerValue, questionID_FK)" +
                                               "values(@ANSWERTEXT, @ANSWERVALUE, @QUESTIONFK)";
 
             using (SqlCommand cmd = new SqlCommand(addAnswerToDBQueryString, con, transaction)) {

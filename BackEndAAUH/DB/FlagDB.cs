@@ -16,6 +16,9 @@ namespace BackEndAAUH.DB {
             Configuration = configuration;
             connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
+        public FlagDB() {
+            connectionString = "Data Source=172.22.96.1,1433; Database=AAUH; user=sa; password=SecretPassword123;Trusted_Connection=False; Encrypt=false; MultipleActiveResultSets=true";
+        }
 
         public int addFlagToDB(Flag flag) {
             int returnedId = -1;
