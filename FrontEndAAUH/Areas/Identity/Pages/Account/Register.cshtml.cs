@@ -152,7 +152,6 @@ namespace FrontEndAAUH.Areas.Identity.Pages.Account
             [Display(Name = "CPR")]
             public string CPR { get; set; }
 
-            [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Profession")]
             public string Profession { get; set; }

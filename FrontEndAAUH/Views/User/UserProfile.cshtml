@@ -14,12 +14,6 @@
     ViewData["Title"] = "Profile";
     var usr = await UserManager.GetUserAsync(User);
     var email = usr?.Email;
-    int questionsCount = 0;
-    foreach (var questionnaire in Model.questionnaires) {
-        foreach (var question in questionnaire.questions) {
-            questionsCount++;
-        }
-    }
 }
 
 
@@ -63,7 +57,7 @@
                     <fieldset>
                         <legend>@Html.DisplayFor(qDesc => Model.questionnaires[qn].questions[q].questionDescription)</legend>
                         @for (int a = 0; a < Model.questionnaires[qn].questions[q].answers.Count; a++) {
-                            <input type="radio" asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex" value="@a" />
+                            <input type="radio" asp-for="@Model.questionnaires[qn].questions[q].chosenAnswerIndex" value="@a"/>
 
                             @Model.questionnaires[qn].questions[q].answers[a].answerText;
 

@@ -6,6 +6,7 @@ namespace FrontEndAAUH.DataAccess {
         public bool addClinicalProfessionalToDB(ClinicProfessional clinicProfessional);
         public bool addMedicalSecretaryToDB(MedicalSecretary medicalSecretary);
         public Patient getPatientByPatientNo(String PatientNo);
+        public string getPatientNoByEmail(String Email);
         public bool getClinicalProfessionalByCPR(String CPR);
         public bool getMedicalSecretaryByCPR(String CPR);
     }

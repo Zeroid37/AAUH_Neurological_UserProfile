@@ -156,6 +156,26 @@ namespace FrontEndAAUH.DataAccess {
             return patient;
         }
 
+        public string getPatientNoByEmail(String Email) {
+            int patientNo = 0000;
+            string getPatientNoFromEmailQuery = "Select patientNo from Patient where email_FK=@EMAIL";
+            try {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (SqlCommand cmdPatient = new SqlCommand(getPatientNoFromEmailQuery, con)) {
+                    con.Open();
+                    cmdPatient.Parameters.AddWithValue("EMAIL", Email);
+                    SqlDataReader readerPatient = cmdPatient.ExecuteReader();
+                    while (readerPatient.Read()) {
+                        patientNo = readerPatient.GetInt32(readerPatient.GetOrdinal("patientNo"));
+                    }
+                    return patientNo.ToString();
+                }
+            } catch (SqlException e) {
+                throw e;
+            }
+        }
+
+
         public bool getClinicalProfessionalByCPR(string CPR) {
             throw new NotImplementedException();
         }

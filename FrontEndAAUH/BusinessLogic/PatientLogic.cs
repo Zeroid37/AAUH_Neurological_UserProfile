@@ -22,17 +22,22 @@ namespace FrontEndAAUH.BusinessLogic {
             return pdb.getPatientByPatientNo(patientNo);
         }
 
-        public bool updatePatientAnswers(Dictionary<String, List<int>> patientAnswers) {
-            bool res = false;
-
-
-            //TODO Implementer metode
-
-            return res;
-
-
+        public string getPatientNoByEmail(String email) {
+            PersonDAO pdb = new PersonDB(Configuration);
+            return pdb.getPatientNoByEmail(email);
         }
 
 
+        public bool updatePatientAnswers(string patientNo, List<int> answerIds) {
+            bool res = false;
+            AnswerDAO adb = new AnswerDB(Configuration);
+            DateTime dateStamp = new DateTime(2024, 10, 06); //YYYY-MM-DD
+
+            foreach (int x in answerIds) {
+                res = adb.addAnswerForPatientToDB(patientNo, x, dateStamp);
+            }
+
+            return res;
+        }
     }
 }

@@ -7,7 +7,5 @@ namespace FrontEndAAUH.Models {
 
         public Patient patient { get; set; }
 
-
-
     }
 }

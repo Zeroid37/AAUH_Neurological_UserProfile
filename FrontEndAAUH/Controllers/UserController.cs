@@ -28,8 +28,7 @@ namespace FrontEndAAUH.Controllers {
                 patient = null;
             }
 
-            if (patient != null) {
-
+            if (patient != null) {  
                 return Task.FromResult<IActionResult>(View(patient));
             } else {
                 return Task.FromResult<IActionResult>(View("UserNotFound"));
@@ -41,8 +40,6 @@ namespace FrontEndAAUH.Controllers {
             PatientLogic pLogic = new PatientLogic(_configuration);
             string patientNo = p.patientNo.ToString();
             List<int> chosenAnswerIds = new List<int>();
-            
-            Dictionary<string, List<int>> PatientAndAnswerIds = new Dictionary<String, List<int>>();
 
 
             foreach (Questionnaire qn in p.questionnaires) {
@@ -50,9 +47,7 @@ namespace FrontEndAAUH.Controllers {
                     chosenAnswerIds.Add(q.answers[Int32.Parse(q.chosenAnswerIndex)].id);
                 }
             }
-            PatientAndAnswerIds.Add(patientNo, chosenAnswerIds);
-
-            bool success = pLogic.updatePatientAnswers(PatientAndAnswerIds);
+            bool success = pLogic.updatePatientAnswers(patientNo, chosenAnswerIds);
 
             if(success) {
                 return RedirectToAction("UserProfile", new { id = p.patientNo });
@@ -81,6 +76,15 @@ namespace FrontEndAAUH.Controllers {
                 return View("UserNotFound");
             }
         }
+
+        public async Task<IActionResult> RedirectToProfile(string email) {
+
+            PatientLogic pLogic = new PatientLogic(_configuration);
+            string patientNo = pLogic.getPatientNoByEmail(email);
+
+            return RedirectToAction("UserProfile", new { id = patientNo });
+        }
+
 
 
 

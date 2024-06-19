@@ -6,23 +6,57 @@
     ViewData["Title"] = "Home Page";
 }
 
+<script type="text/javascript">
+    function handlePatientSubmission(event) {
+        event.preventDefault(); // Prevent the default form submission
+        var patientNo = document.getElementById('patientNoField').value; // Get the input value
+        var baseUrl = "/User/UserProfile/"; // Base URL
+        var targetUrl = baseUrl + patientNo; // Construct the target URL
+        window.open(targetUrl, '_blank'); // Open the constructed URL in a new tab/window
+    }
+</script>
+
+<script type="text/javascript">
+    function handleRegisterSubmission(event) {
+        event.preventDefault(); // Prevent the default form submission
+        var baseUrl = "/Identity/Account/register"; // Base URL
+        window.open(baseUrl, '_blank'); // Open the constructed URL in a new tab/window
+    }
+</script>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Velkommen!</h1>
     @if (!User.Identity.IsAuthenticated) {
         <a href="/Identity/Account/Login">
             <button type="button">Log in</button>
         </a>
     }
-    @if (User.Identity.IsAuthenticated) {
-        <p> You are logged in! </p>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Secretary") || User.IsInRole("ClinicProfessional")) {
+        <p> Du er logged in </p>
+        <form id="patientForm" onsubmit="handlePatientSubmission(event)">
+            <label for="patientNoField">Patient Nummer</label>
+            <input id="patientNoField" type="text" name="" required="" />
+            <input type="submit" value="Se Patient" />
+        </form>
 
-        <a href="/User/UserProfile/381943">
-            <button type="button">Kasper</button>
-        </a>
-        <a href="/User/UserProfile/381944">
-            <button type="button">Smajo</button>
-        </a>
+        <p>Hint: Kasper = 381943</p>
+        <p>Hint: Smajo = 381944</p>
+    }@if (User.Identity.IsAuthenticated && User.IsInRole("Patient")){
+        var usr = await UserManager.GetUserAsync(User);
+        var email = usr?.Email;
+        <form method="post" asp-controller="User" asp-action="RedirectToProfile">
+            <input type="hidden" name="email" value="@email" />
+            <input type="submit" value="Se profil">
+        </form>
     }
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("ClinicProfessional")) {
+        <form id="patientForm" onsubmit="handleRegisterSubmission(event)">
+            <input type="submit" value="Registrer ny patient" />
+        </form>
+    }
+    
+
     
 </div>
 
